@@ -78,11 +78,11 @@ describe('Phase 2 Visual Simulator: MemoryInspector Component', () => {
     );
 
     expect(screen.getByText('lock_alpha')).toBeInTheDocument();
-    expect(screen.getByText('OWNED BY thread-1')).toBeInTheDocument();
+    expect(screen.getByText(/Owned by thread-1/i)).toBeInTheDocument();
     expect(screen.getByText(/thread-2/)).toBeInTheDocument();
 
     expect(screen.getByText('lock_beta')).toBeInTheDocument();
-    expect(screen.getByText('FREE')).toBeInTheDocument();
+    expect(screen.getByText('Free')).toBeInTheDocument();
   });
 
   it('displays structured race diagnostic report with remediation advice', () => {

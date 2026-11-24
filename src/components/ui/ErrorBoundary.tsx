@@ -76,9 +76,7 @@ export class ErrorBoundary extends Component<Props, State> {
             </div>
 
             <div className="p-4 rounded-xl bg-surface-raised border border-border/70 space-y-2">
-              <div className="text-xs font-mono uppercase tracking-wider text-rose-300 font-semibold">
-                Error Message
-              </div>
+              <div className="text-xs font-mono text-rose-300 font-medium">Error message</div>
               <p className="text-sm font-mono text-text-primary break-words">
                 {this.state.error?.message || 'Unknown runtime error'}
               </p>
@@ -114,7 +112,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-border/60">
               <button
                 onClick={this.handleReset}
-                className="px-4 py-2 bg-accent hover:bg-accent/90 text-white rounded-lg text-xs font-semibold flex items-center gap-2 shadow-md shadow-accent/20 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="px-4 py-2 bg-accent hover:bg-accent/90 text-white rounded-lg text-xs font-semibold flex items-center gap-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 <RefreshCw className="w-3.5 h-3.5" /> Recover Session
               </button>

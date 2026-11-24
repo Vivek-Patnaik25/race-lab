@@ -59,17 +59,17 @@ export const ExecutionTimeline: React.FC<ExecutionTimelineProps> = ({
     <div className="flex flex-col h-full bg-background border-r border-border select-none overflow-hidden">
       {/* Header */}
       <div className="p-3 border-b border-border bg-surface/60 flex items-center justify-between shrink-0">
-        <div className="text-xs font-mono uppercase tracking-wider font-semibold text-text-secondary flex items-center gap-1.5">
+        <div className="text-xs font-mono font-medium text-text-secondary flex items-center gap-1.5">
           <Activity className="w-3.5 h-3.5 text-accent" />
-          <span>Execution Timeline (Interleaving Lanes)</span>
+          <span>Execution timeline (interleaving lanes)</span>
         </div>
         <div className="flex items-center gap-2">
           {events.length > currentStep && (
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/40 text-amber-400 border border-amber-800/60 flex items-center gap-1">
-              <History className="w-3 h-3" /> Time Travel Replay
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-surface-raised text-amber-400 border border-border flex items-center gap-1">
+              <History className="w-3 h-3" /> Time travel replay
             </span>
           )}
-          <span className="text-[11px] font-mono text-text-muted">
+          <span className="text-xs font-mono text-text-muted tabular-nums">
             Step {currentStep} of {events.length}
           </span>
         </div>
@@ -103,9 +103,9 @@ export const ExecutionTimeline: React.FC<ExecutionTimelineProps> = ({
                     {/* Step 0 Initial Marker */}
                     <button
                       onClick={() => onSeekStep(0)}
-                      className={`w-7 h-7 rounded-full text-[10px] font-mono border flex items-center justify-center transition-all ${
+                      className={`w-7 h-7 rounded-full text-[10px] font-mono border flex items-center justify-center transition-colors duration-150 ${
                         currentStep === 0
-                          ? 'bg-accent text-white border-accent scale-110 shadow-md shadow-accent/30 font-bold'
+                          ? 'bg-accent text-white border-accent font-semibold'
                           : 'bg-surface-raised border-border text-text-muted hover:border-text-secondary'
                       }`}
                       aria-label="Seek to Step 0 (Initial State)"
@@ -138,12 +138,12 @@ export const ExecutionTimeline: React.FC<ExecutionTimelineProps> = ({
                         <button
                           key={ev.step}
                           onClick={() => onSeekStep(ev.step)}
-                          className={`w-7 h-7 rounded-full text-[10px] font-mono border flex items-center justify-center transition-all relative ${
+                          className={`w-7 h-7 rounded-full text-[10px] font-mono border flex items-center justify-center transition-colors duration-150 relative ${
                             hasRace
-                              ? 'bg-rose-950/80 border-rose-500 text-rose-300 shadow-md shadow-rose-900/40'
+                              ? 'bg-rose-950/80 border-rose-500 text-rose-300'
                               : isCurrentStep
-                                ? 'bg-accent/40 border-accent text-white scale-110 shadow-md shadow-accent/40 font-bold'
-                                : `${opBadge.color} hover:scale-105`
+                                ? 'bg-accent/40 border-accent text-white font-semibold'
+                                : `${opBadge.color}`
                           }`}
                           aria-label={`Step ${ev.step}: ${ev.message}${hasRace ? ' (DATA RACE CONFLICT)' : ''}`}
                           title={`Step ${ev.step}: ${ev.message}${hasRace ? ' (DATA RACE CONFLICT)' : ''}`}

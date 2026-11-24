@@ -8,13 +8,13 @@ import { CHALLENGES } from '../../data/challenges';
 import { useGameStore } from '../../store/game-store';
 
 export const ChallengesPage: React.FC = () => {
-  const [selectedTier, setSelectedTier] = useState<string>('ALL');
+  const [selectedTier, setSelectedTier] = useState<string>('All');
   const { challenges: progressMap, xp, completedMissionsCount } = useGameStore();
 
-  const tiers = ['ALL', 'Beginner', 'Intermediate', 'Advanced'];
+  const tiers = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 
   const filteredChallenges =
-    selectedTier === 'ALL'
+    selectedTier === 'All'
       ? CHALLENGES
       : CHALLENGES.filter((c) => c.tier.toLowerCase() === selectedTier.toLowerCase());
 
@@ -23,7 +23,7 @@ export const ChallengesPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-text-primary">
+          <h1 className="text-xl font-semibold tracking-tight text-text-primary">
             Missions Catalogue
           </h1>
           <p className="text-sm text-text-secondary mt-1">
@@ -36,14 +36,14 @@ export const ChallengesPage: React.FC = () => {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-raised border border-border text-xs font-mono">
             <span className="text-text-muted">Completed:</span>
-            <span className="font-bold text-emerald-400">
+            <span className="font-semibold text-emerald-400 tabular-nums">
               {completedMissionsCount}/{CHALLENGES.length}
             </span>
           </div>
 
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-raised border border-border text-xs font-mono">
             <Trophy className="w-3.5 h-3.5 text-amber-400" />
-            <span className="font-bold text-amber-400">{xp} XP</span>
+            <span className="font-semibold text-amber-400 tabular-nums">{xp} XP</span>
           </div>
         </div>
       </div>
@@ -76,10 +76,8 @@ export const ChallengesPage: React.FC = () => {
           return (
             <Card
               key={challenge.id}
-              className={`flex flex-col justify-between transition-all ${
-                isDone
-                  ? 'border-emerald-900/60 bg-gradient-to-br from-surface to-surface-raised/90'
-                  : 'hover:border-border-subtle'
+              className={`flex flex-col justify-between transition-colors ${
+                isDone ? 'border-emerald-900/60 bg-surface' : 'hover:border-border-subtle'
               }`}
             >
               <div>
@@ -88,8 +86,8 @@ export const ChallengesPage: React.FC = () => {
                     <Badge variant="accent">Mission {challenge.missionNumber}</Badge>
                     <Badge variant="default">{challenge.tier}</Badge>
                     {isDone && (
-                      <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-                        <CheckCircle2 className="w-3 h-3" /> COMPLETED
+                      <span className="inline-flex items-center gap-1 text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                        <CheckCircle2 className="w-3 h-3" /> Completed
                       </span>
                     )}
                   </div>
@@ -98,13 +96,15 @@ export const ChallengesPage: React.FC = () => {
                   </span>
                 </div>
 
-                <h2 className="text-base font-bold text-text-primary mb-1.5">{challenge.title}</h2>
-                <p className="text-sm text-text-secondary mb-3 leading-relaxed">
+                <h2 className="text-base font-semibold text-text-primary mb-1.5">
+                  {challenge.title}
+                </h2>
+                <p className="text-xs text-text-secondary mb-3 leading-relaxed">
                   {challenge.shortDescription}
                 </p>
 
                 <div className="text-xs font-mono text-text-muted bg-background/60 p-2.5 rounded border border-border">
-                  <span className="text-text-secondary font-semibold">Goal:</span>{' '}
+                  <span className="text-text-secondary font-medium">Goal:</span>{' '}
                   {challenge.objective}
                 </div>
 

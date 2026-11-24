@@ -28,8 +28,8 @@ export const AchievementToast: React.FC = () => {
       </div>
 
       <div className="flex-1 pr-2">
-        <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-amber-400 uppercase tracking-wider">
-          <Zap className="w-3 h-3" /> Achievement Unlocked!
+        <div className="flex items-center gap-1.5 text-[10px] font-mono font-medium text-amber-400">
+          <Zap className="w-3 h-3" /> Achievement unlocked
         </div>
         <div className="font-bold text-sm text-text-primary leading-tight mt-0.5">
           {recentAchievement.title}

@@ -47,7 +47,7 @@ describe('Phase 5 Learning Centre & Interactive Concepts Integration', () => {
       </MemoryRouter>
     );
 
-    const searchInput = screen.getByPlaceholderText(/Search concepts or topics/i);
+    const searchInput = screen.getByPlaceholderText(/Search concepts/i);
     fireEvent.change(searchInput, { target: { value: 'Dijkstra' } });
 
     expect(screen.getByText(/Counting Semaphores & Capacity Guards/i)).toBeInTheDocument();
@@ -67,7 +67,7 @@ describe('Phase 5 Learning Centre & Interactive Concepts Integration', () => {
     expect(
       screen.getByText(/The Happens-Before Relationship & Vector Clocks/i)
     ).toBeInTheDocument();
-    expect(screen.getByText(/Interactive Vector Clock Comparator/i)).toBeInTheDocument();
+    expect(screen.getByText(/Vector Clock Comparator/i)).toBeInTheDocument();
 
     // Formulas and sections
     expect(screen.getByText(/Lamport Causality & Vector Clocks/i)).toBeInTheDocument();
@@ -104,7 +104,7 @@ describe('Phase 5 Learning Centre & Interactive Concepts Integration', () => {
     fireEvent.click(raceInterleavingBtn);
 
     // Should confirm lost update
-    expect(screen.getByText(/LOST UPDATE CONFIRMED/i)).toBeInTheDocument();
+    expect(screen.getByText(/Lost update detected/i)).toBeInTheDocument();
   });
 
   it('renders ConceptDetailPage with interactive deadlock cycle detector', () => {

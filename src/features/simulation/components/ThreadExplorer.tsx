@@ -47,12 +47,12 @@ export const ThreadExplorer: React.FC<ThreadExplorerProps> = ({
     <div className="flex flex-col h-full bg-surface border-r border-border select-none overflow-hidden">
       {/* Header */}
       <div className="p-3 border-b border-border bg-surface-raised/40 flex items-center justify-between shrink-0">
-        <div className="text-xs font-mono uppercase tracking-wider font-semibold text-text-secondary flex items-center gap-1.5">
+        <div className="text-xs font-mono font-medium text-text-secondary flex items-center gap-1.5">
           <Layers className="w-3.5 h-3.5 text-accent" />
-          <span>Thread Explorer</span>
+          <span>Thread explorer</span>
         </div>
         <span className="text-[11px] font-mono text-text-muted">
-          {threads.length} {threads.length === 1 ? 'Thread' : 'Threads'}
+          {threads.length} {threads.length === 1 ? 'thread' : 'threads'}
         </span>
       </div>
 
@@ -68,7 +68,7 @@ export const ThreadExplorer: React.FC<ThreadExplorerProps> = ({
             <div
               key={thread.id}
               onClick={() => onSelectThread(thread.id)}
-              className={`rounded-lg border p-3 space-y-3 cursor-pointer transition-all duration-150 ${
+              className={`rounded-lg border p-3 space-y-3 cursor-pointer transition-colors duration-150 ${
                 isSelected
                   ? 'border-accent/60 bg-surface-raised shadow-md shadow-accent/10'
                   : 'border-border bg-background hover:border-text-secondary/30'
@@ -189,8 +189,8 @@ export const ThreadExplorer: React.FC<ThreadExplorerProps> = ({
 
               {/* Local Memory / Registers Table */}
               <div className="pt-2 border-t border-border/60 text-[11px] font-mono">
-                <div className="text-text-muted text-[10px] uppercase tracking-wider mb-1 flex items-center justify-between">
-                  <span>Local Memory</span>
+                <div className="text-text-muted text-xs mb-1 flex items-center justify-between">
+                  <span>Local memory</span>
                   <span>{Object.keys(thread.localMemory).length} registers</span>
                 </div>
                 {Object.keys(thread.localMemory).length === 0 ? (
@@ -205,7 +205,9 @@ export const ThreadExplorer: React.FC<ThreadExplorerProps> = ({
                         className="flex justify-between items-center text-text-secondary bg-surface px-2 py-1 rounded border border-border/40"
                       >
                         <span className="text-text-muted">{reg}</span>
-                        <span className="text-accent font-bold font-mono">{val}</span>
+                        <span className="text-accent font-semibold font-mono tabular-nums">
+                          {val}
+                        </span>
                       </div>
                     ))}
                   </div>

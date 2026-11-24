@@ -63,9 +63,7 @@ export const ChallengeDetailPage: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
           <Card className="space-y-4">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-text-secondary">
-              Mission Briefing
-            </h2>
+            <h2 className="text-sm font-medium text-text-secondary">Mission briefing</h2>
             <p className="text-sm text-text-secondary leading-relaxed">
               {challenge.shortDescription}
             </p>
@@ -81,9 +79,7 @@ export const ChallengeDetailPage: React.FC = () => {
 
           {/* Expected Threads */}
           <Card className="space-y-3">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-text-secondary">
-              Scenario Threads
-            </h2>
+            <h2 className="text-sm font-medium text-text-secondary">Scenario threads</h2>
             <div className="text-xs font-mono text-text-muted mb-2">
               This scenario initializes {challenge.threadCount} concurrent threads:
             </div>
@@ -105,9 +101,7 @@ export const ChallengeDetailPage: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Lightbulb className="w-4 h-4 text-amber-400" />
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-text-secondary">
-                  Mission Hints & Intel
-                </h2>
+                <h2 className="text-sm font-medium text-text-secondary">Mission hints & intel</h2>
               </div>
               <span className="text-[11px] font-mono text-text-muted">Cost: -150 pts per hint</span>
             </div>
@@ -162,11 +156,9 @@ export const ChallengeDetailPage: React.FC = () => {
         {/* Sidebar Info */}
         <div className="space-y-4">
           {isCompleted && progress && (
-            <Card className="border-emerald-800/60 bg-gradient-to-br from-emerald-950/20 to-surface space-y-3">
+            <Card className="border-border bg-surface-raised space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-emerald-400 uppercase">
-                  Completed
-                </span>
+                <span className="text-xs font-mono font-medium text-emerald-400">Completed</span>
                 <div className="flex items-center gap-1">
                   {[1, 2, 3].map((starIdx) => (
                     <Star
@@ -181,16 +173,14 @@ export const ChallengeDetailPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="text-xl font-bold font-mono text-white">
+              <div className="text-xl font-semibold font-mono text-text-primary tabular-nums">
                 {progress.bestScore} <span className="text-xs text-text-muted">pts</span>
               </div>
             </Card>
           )}
 
           <Card className="space-y-3">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
-              Parameters
-            </h3>
+            <h3 className="text-xs font-medium text-text-secondary">Parameters</h3>
             <div className="text-xs font-mono space-y-2">
               <div className="flex justify-between border-b border-border/60 pb-1.5 text-text-muted">
                 <span>Concept:</span>

@@ -27,11 +27,11 @@ export const Sidebar: React.FC = () => {
   return (
     <aside
       className={cn(
-        'border-r border-border bg-surface flex flex-col transition-all duration-200 select-none z-20',
+        'border-r border-border bg-surface flex flex-col transition-[width] duration-150 ease-out select-none z-20',
         collapsed ? 'w-16' : 'w-56'
       )}
     >
-      <div className="flex-1 py-4 px-2 space-y-1">
+      <div className="flex-1 py-3 px-2 space-y-1">
         {navItems.map((item) => {
           const Icon = item.icon;
           return (
@@ -41,15 +41,15 @@ export const Sidebar: React.FC = () => {
               end={item.end}
               className={({ isActive }) =>
                 cn(
-                  'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors group relative',
+                  'flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors group relative',
                   isActive
-                    ? 'bg-accent/15 text-accent border border-accent/30 font-semibold'
-                    : 'text-text-secondary hover:text-text-primary hover:bg-surface-raised border border-transparent'
+                    ? 'bg-surface-raised text-text-primary border border-border/80'
+                    : 'text-text-secondary hover:text-text-primary hover:bg-surface-raised/60 border border-transparent'
                 )
               }
               title={collapsed ? item.label : undefined}
             >
-              <Icon className="w-4 h-4 shrink-0" />
+              <Icon className="w-4 h-4 shrink-0 text-text-muted group-hover:text-text-primary" />
               {!collapsed && <span>{item.label}</span>}
             </NavLink>
           );

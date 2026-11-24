@@ -92,7 +92,7 @@ export const CHALLENGES: ChallengeDefinition[] = [
         return {
           isSuccess: true,
           reason:
-            'Success! You reproduced the Lost Update anomaly: two concurrent increments yielded counter = 1 and triggered a data race.',
+            'Objective met: You reproduced the Lost Update anomaly: two concurrent increments yielded counter = 1 and triggered a data race.',
           metrics: {
             targetAchieved: true,
             racesFound,
@@ -201,7 +201,7 @@ export const CHALLENGES: ChallengeDefinition[] = [
       if (balance !== 120 && racesFound > 0) {
         return {
           isSuccess: true,
-          reason: `Success! You exposed the Banking Disaster: unsynchronized balance read/write produced an inconsistent balance of $${balance} instead of $120.`,
+          reason: `Objective met: You exposed the Banking Disaster: unsynchronized balance read/write produced an inconsistent balance of $${balance} instead of $120.`,
           metrics: {
             targetAchieved: true,
             racesFound,
@@ -314,7 +314,7 @@ export const CHALLENGES: ChallengeDefinition[] = [
         return {
           isSuccess: true,
           reason:
-            'Success! The critical sections were serialized with vault_mutex. Final balance is correctly $120 with zero data races.',
+            'Objective met: The critical sections were serialized with vault_mutex. Final balance is correctly $120 with zero data races.',
           metrics: {
             targetAchieved: true,
             racesFound: 0,
@@ -422,7 +422,7 @@ export const CHALLENGES: ChallengeDefinition[] = [
       if (isDeadlocked && deadlock && deadlock.cycle.length >= 2) {
         return {
           isSuccess: true,
-          reason: `Success! Deadlock cycle detected (${deadlock.cycle.join(' → ')}). Both threads are permanently blocked waiting for locks held by each other.`,
+          reason: `Objective met: Deadlock cycle detected (${deadlock.cycle.join(' → ')}). Both threads are permanently blocked waiting for locks held by each other.`,
           metrics: {
             targetAchieved: true,
             racesFound: state.activeRaces.length,
@@ -538,7 +538,7 @@ export const CHALLENGES: ChallengeDefinition[] = [
       if (racesFound > 0) {
         return {
           isSuccess: true,
-          reason: `Success! Capacity race condition exposed: 3 vehicles crossed simultaneously with no synchronization, triggering ${racesFound} data races and leaving bridgeSlots = ${bridgeSlots}.`,
+          reason: `Objective met: Capacity race condition exposed: 3 vehicles crossed simultaneously with no synchronization, triggering ${racesFound} data races and leaving bridgeSlots = ${bridgeSlots}.`,
           metrics: {
             targetAchieved: true,
             racesFound,

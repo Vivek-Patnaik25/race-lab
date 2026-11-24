@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Sparkles,
+  Compass,
   Cpu,
   Layers,
   Award,
@@ -159,10 +159,8 @@ export const OnboardingModal: React.FC = () => {
         {/* Top bar with slide progress indicators */}
         <div className="px-6 py-4 border-b border-border bg-surface-raised/40 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-accent" />
-            <span className="text-xs font-mono font-semibold uppercase tracking-wider text-accent">
-              RaceLab Orientation
-            </span>
+            <Compass className="w-4 h-4 text-accent" />
+            <span className="text-xs font-mono font-medium text-accent">RaceLab Orientation</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -186,9 +184,9 @@ export const OnboardingModal: React.FC = () => {
               key={idx}
               onClick={() => setCurrentSlide(idx)}
               aria-label={`Jump to slide ${idx + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-200 ${
+              className={`h-1.5 rounded-full transition-colors duration-150 ${
                 idx === currentSlide
-                  ? 'bg-accent shadow-sm shadow-accent/50'
+                  ? 'bg-accent'
                   : idx < currentSlide
                     ? 'bg-accent/40'
                     : 'bg-surface-raised'
@@ -204,12 +202,12 @@ export const OnboardingModal: React.FC = () => {
               {slide.icon}
             </div>
             <div>
-              <div className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wide bg-accent/15 text-accent border border-accent/30 mb-1.5">
+              <div className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-medium capitalize bg-accent/15 text-accent border border-accent/30 mb-1.5">
                 {slide.badge}
               </div>
               <h2
                 id="onboarding-modal-title"
-                className="text-xl md:text-2xl font-bold tracking-tight text-text-primary"
+                className="text-xl md:text-2xl font-semibold tracking-tight text-text-primary"
               >
                 {slide.title}
               </h2>
@@ -222,9 +220,7 @@ export const OnboardingModal: React.FC = () => {
           </p>
 
           <div className="space-y-2">
-            <div className="text-xs font-mono uppercase tracking-wider text-text-muted font-semibold">
-              Key Capabilities
-            </div>
+            <div className="text-xs font-mono text-text-muted font-medium">Key capabilities</div>
             <div className="space-y-2">
               {slide.keyFeatures.map((feat, i) => (
                 <div key={i} className="flex items-start gap-2.5 text-xs text-text-primary">
@@ -262,7 +258,7 @@ export const OnboardingModal: React.FC = () => {
 
             <button
               onClick={handleNext}
-              className="px-4 py-1.5 rounded-lg bg-accent hover:bg-accent/90 text-xs font-semibold text-white flex items-center gap-1.5 shadow-md shadow-accent/20 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="px-4 py-1.5 rounded-lg bg-accent hover:bg-accent/90 text-xs font-semibold text-white flex items-center gap-1.5 shadow-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               {currentSlide === slides.length - 1 ? (
                 <>

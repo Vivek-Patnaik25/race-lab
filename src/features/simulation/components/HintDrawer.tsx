@@ -58,18 +58,18 @@ export const HintDrawer: React.FC<HintDrawerProps> = ({ hints, isOpen, onClose }
             return (
               <div
                 key={hint.id}
-                className={`p-4 rounded-lg border transition-all ${
+                className={`p-4 rounded-lg border transition-colors ${
                   unlocked
-                    ? 'bg-surface-raised/70 border-accent/40 shadow-sm'
+                    ? 'bg-surface-raised border-accent/40 shadow-sm'
                     : 'bg-surface/60 border-border opacity-90'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-surface border border-border text-text-secondary">
-                      TIER {hint.tier}
+                    <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-surface border border-border text-text-secondary">
+                      Tier {hint.tier}
                     </span>
-                    <h3 className="text-xs font-bold text-text-primary">{hint.title}</h3>
+                    <h3 className="text-xs font-semibold text-text-primary">{hint.title}</h3>
                   </div>
 
                   {unlocked ? (

@@ -5,7 +5,7 @@ import {
   ArrowRight,
   BookOpen,
   Search,
-  Sparkles,
+  FlaskConical,
   PlayCircle,
   Filter,
 } from 'lucide-react';
@@ -14,14 +14,14 @@ import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { CONCEPTS } from '../../data/concepts';
 
-type CategoryFilter = 'ALL' | 'Fundamentals' | 'Synchronization' | 'Pitfalls' | 'Theory';
+type CategoryFilter = 'All' | 'Fundamentals' | 'Synchronization' | 'Pitfalls' | 'Theory';
 
 export const LearningPage: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>('ALL');
+  const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const filteredConcepts = CONCEPTS.filter((concept) => {
-    const matchesCategory = selectedCategory === 'ALL' || concept.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'All' || concept.category === selectedCategory;
     const query = searchQuery.trim().toLowerCase();
     const matchesSearch =
       query === '' ||
@@ -34,7 +34,7 @@ export const LearningPage: React.FC = () => {
   });
 
   const categories: CategoryFilter[] = [
-    'ALL',
+    'All',
     'Fundamentals',
     'Synchronization',
     'Pitfalls',
@@ -47,11 +47,13 @@ export const LearningPage: React.FC = () => {
       <div className="pb-4 border-b border-border">
         <div className="flex items-center gap-2 mb-1">
           <GraduationCap className="w-5 h-5 text-accent" />
-          <h1 className="text-2xl font-bold tracking-tight text-text-primary">Learning Centre</h1>
+          <h1 className="text-xl font-semibold tracking-tight text-text-primary">
+            Learning Centre
+          </h1>
         </div>
         <p className="text-sm text-text-secondary">
-          Deep-dive visual and mathematical guides to concurrency theory, vector clocks,
-          synchronization, and race detection. Each concept includes an interactive sandbox.
+          Visual and mathematical guides to concurrency theory, vector clocks, synchronization, and
+          race detection. Each concept includes an interactive sandbox.
         </p>
       </div>
 
@@ -65,8 +67,8 @@ export const LearningPage: React.FC = () => {
               onClick={() => setSelectedCategory(cat)}
               className={`px-3 py-1.5 rounded-md text-xs font-mono transition-colors whitespace-nowrap ${
                 selectedCategory === cat
-                  ? 'bg-accent text-white font-bold shadow-sm shadow-accent/20'
-                  : 'bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-raised border border-border'
+                  ? 'bg-surface-raised text-text-primary font-medium border border-border'
+                  : 'bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-raised/60 border border-border/60'
               }`}
             >
               {cat}
@@ -79,7 +81,7 @@ export const LearningPage: React.FC = () => {
           <Search className="w-3.5 h-3.5 text-text-muted absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search concepts or topics..."
+            placeholder="Search concepts"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-8 pr-3 py-1.5 rounded-md bg-surface border border-border text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-accent font-sans"
@@ -99,7 +101,7 @@ export const LearningPage: React.FC = () => {
             size="sm"
             variant="secondary"
             onClick={() => {
-              setSelectedCategory('ALL');
+              setSelectedCategory('All');
               setSearchQuery('');
             }}
             className="text-xs font-mono"
@@ -116,16 +118,16 @@ export const LearningPage: React.FC = () => {
                   <div className="flex items-center gap-1.5">
                     <Badge variant="accent">{concept.category}</Badge>
                     <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface-raised border border-border/60 text-accent flex items-center gap-1">
-                      <Sparkles className="w-2.5 h-2.5" /> Interactive Demo
+                      <FlaskConical className="w-2.5 h-2.5" /> Sandbox
                     </span>
                   </div>
                   <span className="text-xs font-mono text-text-muted">{concept.readTime}</span>
                 </div>
 
-                <h2 className="text-base font-bold text-text-primary mb-1.5 group-hover:text-accent transition-colors">
+                <h2 className="text-base font-semibold text-text-primary mb-1.5 group-hover:text-accent transition-colors">
                   {concept.title}
                 </h2>
-                <p className="text-sm text-text-secondary leading-relaxed">{concept.summary}</p>
+                <p className="text-xs text-text-secondary leading-relaxed">{concept.summary}</p>
               </div>
 
               <div className="mt-4 pt-3 border-t border-border flex items-center justify-between">

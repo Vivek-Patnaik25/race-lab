@@ -173,7 +173,7 @@ export const SchedulerWidget: React.FC = () => {
             return (
               <div
                 key={idx}
-                className={`p-2 rounded border text-center transition-all ${
+                className={`p-2 rounded border text-center transition-colors ${
                   isCurrent
                     ? 'border-accent bg-accent/20 ring-1 ring-accent'
                     : isExecuted

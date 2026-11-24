@@ -34,14 +34,14 @@ export const RaceReportPanel: React.FC<RaceReportPanelProps> = ({ races }) => {
 
   return (
     <div className="space-y-3 font-mono">
-      <div className="text-xs uppercase tracking-wider font-semibold text-rose-400 flex items-center justify-between">
+      <div className="text-xs font-mono font-medium text-rose-400 flex items-center justify-between">
         <div className="flex items-center gap-1.5">
           <ShieldAlert className="w-4 h-4 text-rose-400" />
-          <span>Race Diagnostic Reports ({races.length})</span>
+          <span>Race diagnostic reports ({races.length})</span>
         </div>
         <Link
           to="/app/learn/race-conditions"
-          className="text-[10px] lowercase font-normal text-rose-300/80 hover:text-rose-200 hover:underline flex items-center gap-1"
+          className="text-xs font-normal text-rose-300/80 hover:text-rose-200 hover:underline flex items-center gap-1"
         >
           <BookOpen className="w-3 h-3" />
           guide: race conditions
@@ -86,24 +86,22 @@ export const RaceReportPanel: React.FC<RaceReportPanelProps> = ({ races }) => {
 
             {/* Causality Explanation */}
             <div className="text-[11px] text-text-secondary leading-relaxed bg-surface-raised/40 p-2 rounded space-y-1">
-              <div className="text-rose-300 font-semibold text-[10px] uppercase tracking-wider">
-                Causality Analysis
-              </div>
+              <div className="text-rose-400/90 font-medium text-xs">Causality analysis</div>
               <p>{race.explanation}</p>
-              <div className="pt-1 flex items-center gap-3 text-[10px]">
+              <div className="pt-1 flex items-center gap-3 text-xs">
                 <Link
                   to="/app/learn/race-conditions"
                   className="text-accent hover:underline flex items-center gap-1"
                 >
                   <BookOpen className="w-3 h-3" />
-                  Race Theory
+                  Race theory
                 </Link>
                 <Link
                   to="/app/learn/happens-before"
                   className="text-accent hover:underline flex items-center gap-1"
                 >
                   <BookOpen className="w-3 h-3" />
-                  Vector Clocks
+                  Vector clocks
                 </Link>
               </div>
             </div>

@@ -255,9 +255,7 @@ export const MutexWidget: React.FC = () => {
       {/* Log Output */}
       {log.length > 0 && (
         <div className="p-3 rounded-lg border border-border/60 bg-background text-xs space-y-1">
-          <div className="text-[10px] uppercase tracking-wider text-text-muted font-bold">
-            Mutex Event Log:
-          </div>
+          <div className="text-xs text-text-muted font-medium">Mutex event log</div>
           <div className="space-y-0.5 max-h-24 overflow-y-auto text-[11px] text-text-secondary font-mono">
             {log.map((item, i) => (
               <div key={i} className="flex items-center gap-2">

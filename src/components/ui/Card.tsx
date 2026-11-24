@@ -9,9 +9,9 @@ export const Card: React.FC<CardProps> = ({ className, hoverable = false, childr
   return (
     <div
       className={cn(
-        'bg-surface border border-border rounded-lg p-5 transition-all duration-150',
+        'bg-surface border border-border rounded-lg p-5 transition-colors duration-150',
         hoverable &&
-          'hover:border-text-secondary/30 hover:bg-surface-raised cursor-pointer shadow-lg shadow-black/30',
+          'hover:border-text-secondary/40 hover:bg-surface-raised cursor-pointer shadow-lg shadow-black/30',
         className
       )}
       {...props}

@@ -85,13 +85,13 @@ describe('Phase 3 Integration: Challenge & Game Progression Workflow', () => {
     const verifyButton = screen.getByRole('button', { name: /Verify Objective/i });
     fireEvent.click(verifyButton);
 
-    // Modal pops up with Mission Accomplished
-    expect(screen.getByText(/Mission Accomplished/i)).toBeInTheDocument();
+    // Modal pops up with Mission Complete
+    expect(screen.getByText(/Mission Complete/i)).toBeInTheDocument();
     expect(screen.getByText(/You reproduced the Lost Update anomaly/i)).toBeInTheDocument();
 
     // Score checks: 1000 base + 500 step bonus - 150 hint penalty = 1350 pts
     expect(screen.getByText('1350')).toBeInTheDocument();
-    expect(screen.getByText('Engineering Takeaway')).toBeInTheDocument();
+    expect(screen.getByText(/Engineering Takeaway/i)).toBeInTheDocument();
 
     // Store assertions
     const savedMission = useGameStore.getState().challenges['mission-01'];
@@ -116,7 +116,7 @@ describe('Phase 3 Integration: Challenge & Game Progression Workflow', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('COMPLETED')).toBeInTheDocument();
+    expect(screen.getByText('Completed')).toBeInTheDocument();
     expect(screen.getByText(/Best: 1350 pts/i)).toBeInTheDocument();
   });
 });

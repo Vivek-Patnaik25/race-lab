@@ -112,13 +112,13 @@ export const SemaphoreWidget: React.FC = () => {
             return (
               <div
                 key={i}
-                className={`flex-1 p-2 rounded border text-center text-xs font-bold transition-all ${
+                className={`flex-1 p-2 rounded border text-center text-xs font-medium transition-colors ${
                   isAvailable
                     ? 'border-emerald-800/80 bg-emerald-950/40 text-emerald-300'
                     : 'border-border/60 bg-surface/40 text-text-muted'
                 }`}
               >
-                Permit #{i + 1}: {isAvailable ? 'AVAILABLE' : 'IN USE'}
+                Permit #{i + 1}: {isAvailable ? 'Available' : 'In use'}
               </div>
             );
           })}
@@ -191,9 +191,7 @@ export const SemaphoreWidget: React.FC = () => {
       {/* Log Output */}
       {log.length > 0 && (
         <div className="p-3 rounded-lg border border-border/60 bg-background text-xs space-y-1">
-          <div className="text-[10px] uppercase tracking-wider text-text-muted font-bold">
-            Semaphore Activity Log:
-          </div>
+          <div className="text-xs text-text-muted font-medium">Semaphore activity log</div>
           <div className="space-y-0.5 max-h-24 overflow-y-auto text-[11px] text-text-secondary font-mono">
             {log.map((item, i) => (
               <div key={i} className="flex items-center gap-2">

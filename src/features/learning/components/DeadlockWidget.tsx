@@ -85,8 +85,8 @@ export const DeadlockWidget: React.FC = () => {
                 : 'Thread A requests Mutex 2 (waiting for Thread B).')}
             {step === 4 &&
               (useOrderingProtocol
-                ? 'Thread A releases both mutexes; Thread B acquires and finishes safely!'
-                : 'Thread B requests Mutex 1 (waiting for Thread A) → CIRCULAR WAIT CYCLE!')}
+                ? 'Thread A releases both mutexes; Thread B acquires and finishes safely.'
+                : 'Thread B requests Mutex 1 (waiting for Thread A) → circular wait cycle.')}
           </span>
         </div>
 
@@ -97,7 +97,7 @@ export const DeadlockWidget: React.FC = () => {
           disabled={step >= 4}
           className="text-xs h-7 gap-1 bg-surface"
         >
-          <span>Step Next</span>
+          <span>Step next</span>
           <ArrowRight className="w-3 h-3" />
         </Button>
       </div>

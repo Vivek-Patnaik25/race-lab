@@ -82,7 +82,7 @@ describe('Phase 6: Production Release & Accessibility Features', () => {
         </MemoryRouter>
       );
 
-      expect(screen.getByText(/Error 404 • Thread Unreachable/i)).toBeInTheDocument();
+      expect(screen.getByText(/404 • Thread unreachable/i)).toBeInTheDocument();
       expect(screen.getByText(/Instruction Pointer Lost/i)).toBeInTheDocument();
       expect(screen.getByText('Dashboard')).toBeInTheDocument();
       expect(screen.getByText('Challenges')).toBeInTheDocument();

@@ -23,7 +23,7 @@ export const Panel: React.FC<PanelProps> = ({
     >
       {title && (
         <div className="flex items-center justify-between px-4 py-2.5 bg-surface-raised/60 border-b border-border">
-          <div className="text-xs font-semibold uppercase tracking-wider text-text-secondary flex items-center gap-2">
+          <div className="text-xs font-medium text-text-secondary flex items-center gap-2">
             {title}
           </div>
           {headerAction && <div className="flex items-center gap-2">{headerAction}</div>}

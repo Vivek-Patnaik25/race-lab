@@ -15,7 +15,7 @@ export const StarvationWidget: React.FC = () => {
         setOwner('Thread C');
         setHistory((h) => [
           ...h,
-          `FIFO Handoff: Mutex passed to Thread C (waited ${threadCWaitCycles} cycles). Thread C runs!`,
+          `FIFO handoff: Mutex passed to Thread C (waited ${threadCWaitCycles} cycles). Thread C runs.`,
         ]);
         setThreadCWaitCycles(0);
       } else {
@@ -26,14 +26,14 @@ export const StarvationWidget: React.FC = () => {
         ]);
       }
     } else {
-      // Unfair barging mode: Thread A and Thread B alternate directly, barging ahead of Thread C!
+      // Unfair barging mode: Thread A and Thread B alternate directly, barging ahead of Thread C
       const nextOwner = owner === 'Thread A' ? 'Thread B' : 'Thread A';
       setOwner(nextOwner);
       const newWait = threadCWaitCycles + 1;
       setThreadCWaitCycles(newWait);
       setHistory((h) => [
         ...h,
-        `Unfair Barging: ${nextOwner} barged in and stole lock ahead of waiting Thread C! (Thread C waited ${newWait} cycles)`,
+        `Unfair barging: ${nextOwner} barged in ahead of waiting Thread C (waited ${newWait} cycles).`,
       ]);
     }
   };
@@ -48,9 +48,9 @@ export const StarvationWidget: React.FC = () => {
     <div className="p-4 rounded-lg border border-border bg-surface space-y-4 font-mono">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-3">
         <div>
-          <h3 className="text-sm font-bold text-text-primary flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-text-primary flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-amber-400" />
-            Interactive Lock Fairness vs Starvation Explorer
+            Lock fairness and starvation explorer
           </h3>
           <p className="text-xs text-text-muted mt-0.5 font-sans">
             Compare FIFO fair queuing against unfair lock barging where a waiting thread is starved
@@ -80,27 +80,21 @@ export const StarvationWidget: React.FC = () => {
       {/* Lock State Overview */}
       <div className="p-3.5 rounded-lg border border-border/80 bg-background grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
         <div className="p-2.5 rounded bg-surface border border-border/60">
-          <span className="text-[10px] text-text-muted uppercase block mb-1">
-            Current Lock Owner:
-          </span>
-          <span className="font-bold text-accent text-sm">{owner}</span>
+          <span className="text-[10px] text-text-muted block mb-1">Current lock owner:</span>
+          <span className="font-semibold text-accent text-sm">{owner}</span>
         </div>
 
         <div className="p-2.5 rounded bg-surface border border-border/60">
-          <span className="text-[10px] text-text-muted uppercase block mb-1">
-            Queue Discipline:
-          </span>
-          <span className="font-bold text-text-primary">
-            {fairMode ? 'Strict FIFO Fairness' : 'Unfair Barging (Greedy)'}
+          <span className="text-[10px] text-text-muted block mb-1">Queue discipline:</span>
+          <span className="font-semibold text-text-primary">
+            {fairMode ? 'Strict FIFO fairness' : 'Unfair barging (greedy)'}
           </span>
         </div>
 
         <div className="p-2.5 rounded bg-surface border border-border/60">
-          <span className="text-[10px] text-text-muted uppercase block mb-1">
-            Thread C Wait Cycles:
-          </span>
+          <span className="text-[10px] text-text-muted block mb-1">Thread C wait cycles:</span>
           <span
-            className={`font-bold text-sm ${
+            className={`font-semibold text-sm tabular-nums ${
               threadCWaitCycles >= 3 ? 'text-rose-400' : 'text-emerald-400'
             }`}
           >
@@ -114,40 +108,40 @@ export const StarvationWidget: React.FC = () => {
         {/* Thread A */}
         <div className="p-3 rounded-lg border border-border/80 bg-background space-y-2 text-xs">
           <div className="flex justify-between items-center border-b border-border/50 pb-1">
-            <span className="font-bold text-blue-400">Thread A (Fast)</span>
+            <span className="font-semibold text-blue-400">Thread A (Fast)</span>
             <span className="text-[10px] text-text-muted">High Frequency</span>
           </div>
           <div className="text-[11px] text-text-secondary">
             Status:{' '}
-            {owner === 'Thread A' ? <strong className="text-emerald-400">RUNNING</strong> : 'IDLE'}
+            {owner === 'Thread A' ? <strong className="text-emerald-400">Running</strong> : 'Idle'}
           </div>
         </div>
 
         {/* Thread B */}
         <div className="p-3 rounded-lg border border-border/80 bg-background space-y-2 text-xs">
           <div className="flex justify-between items-center border-b border-border/50 pb-1">
-            <span className="font-bold text-purple-400">Thread B (Fast)</span>
+            <span className="font-semibold text-purple-400">Thread B (Fast)</span>
             <span className="text-[10px] text-text-muted">High Frequency</span>
           </div>
           <div className="text-[11px] text-text-secondary">
             Status:{' '}
-            {owner === 'Thread B' ? <strong className="text-emerald-400">RUNNING</strong> : 'IDLE'}
+            {owner === 'Thread B' ? <strong className="text-emerald-400">Running</strong> : 'Idle'}
           </div>
         </div>
 
         {/* Thread C */}
         <div className="p-3 rounded-lg border border-border/80 bg-background space-y-2 text-xs">
           <div className="flex justify-between items-center border-b border-border/50 pb-1">
-            <span className="font-bold text-amber-400">Thread C (Waiting)</span>
+            <span className="font-semibold text-amber-400">Thread C (Waiting)</span>
             <span className="text-[10px] text-text-muted">Patient Worker</span>
           </div>
           <div className="text-[11px] text-text-secondary">
             Status:{' '}
             {owner === 'Thread C' ? (
-              <strong className="text-emerald-400">RUNNING (Acquired Lock!)</strong>
+              <strong className="text-emerald-400">Running (acquired lock)</strong>
             ) : (
               <span className="text-rose-400 font-semibold">
-                WAITING ({threadCWaitCycles} cycles)
+                Waiting ({threadCWaitCycles} cycles)
               </span>
             )}
           </div>
@@ -163,16 +157,16 @@ export const StarvationWidget: React.FC = () => {
           className="text-xs h-8 gap-1.5 bg-background border-border"
         >
           <Play className="w-3.5 h-3.5 text-accent" />
-          Run Lock Contention Cycle
+          Run lock contention cycle
         </Button>
       </div>
 
       {/* Starvation Warning Banner */}
       {!fairMode && threadCWaitCycles >= 3 && (
         <div className="p-3.5 rounded-lg border border-rose-800 bg-rose-950/40 text-xs space-y-1 text-rose-300">
-          <div className="flex items-center gap-2 font-bold text-rose-400">
+          <div className="flex items-center gap-2 font-semibold text-rose-400">
             <AlertTriangle className="w-4 h-4 shrink-0" />
-            <span>THREAD STARVATION DETECTED</span>
+            <span>Thread starvation detected</span>
           </div>
           <p className="text-[11px] text-text-secondary leading-relaxed font-sans">
             Because the lock allows barging, Threads A and B repeatedly hand off or steal the lock
@@ -198,9 +192,7 @@ export const StarvationWidget: React.FC = () => {
       {/* History Log */}
       {history.length > 0 && (
         <div className="p-3 rounded-lg border border-border/60 bg-background text-xs space-y-1">
-          <div className="text-[10px] uppercase tracking-wider text-text-muted font-bold">
-            Contention History:
-          </div>
+          <div className="text-xs text-text-muted font-medium">Contention history</div>
           <div className="space-y-0.5 max-h-24 overflow-y-auto text-[11px] text-text-secondary font-mono">
             {history.map((item, i) => (
               <div key={i} className="flex items-center gap-2">

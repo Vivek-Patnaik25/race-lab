@@ -50,8 +50,8 @@ export const AchievementsPage: React.FC = () => {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <Trophy className="w-5 h-5 text-amber-400" />
-            <h1 className="text-2xl font-bold tracking-tight text-text-primary">
-              Engineering Achievements
+            <h1 className="text-2xl font-semibold tracking-tight text-text-primary">
+              Achievements
             </h1>
           </div>
           <p className="text-sm text-text-secondary">
@@ -61,8 +61,10 @@ export const AchievementsPage: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-raised border border-border">
-          <span className="text-xs text-text-muted">Total Score:</span>
-          <span className="font-mono font-bold text-sm text-amber-400">{xp} XP</span>
+          <span className="text-xs text-text-muted">Total score:</span>
+          <span className="font-mono font-semibold text-sm text-amber-400 tabular-nums">
+            {xp} XP
+          </span>
         </div>
       </div>
 
@@ -71,13 +73,13 @@ export const AchievementsPage: React.FC = () => {
         <div className="flex items-center justify-between text-xs font-mono">
           <span className="text-text-muted">
             Progress: <strong className="text-text-primary">{unlockedCount}</strong> of{' '}
-            <strong>{achievements.length}</strong> Unlocked
+            <strong>{achievements.length}</strong> unlocked
           </span>
-          <span className="text-amber-400 font-bold">{progressPercent}%</span>
+          <span className="text-amber-400 font-semibold tabular-nums">{progressPercent}%</span>
         </div>
         <div className="w-full h-2 rounded-full bg-surface border border-border overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-amber-500 to-amber-400 transition-all duration-500 rounded-full"
+            className="h-full bg-amber-400 transition-[width] duration-300 rounded-full"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -88,16 +90,14 @@ export const AchievementsPage: React.FC = () => {
         {achievements.map((ach) => (
           <Card
             key={ach.id}
-            className={`flex items-start gap-4 transition-all ${
-              ach.unlocked
-                ? 'border-amber-700/50 bg-gradient-to-r from-surface via-surface-raised/60 to-surface-raised shadow-sm'
-                : 'opacity-60 bg-surface/30'
+            className={`flex items-start gap-4 transition-colors duration-150 ${
+              ach.unlocked ? 'border-border/90 bg-surface-raised' : 'opacity-60 bg-surface/30'
             }`}
           >
             <div
               className={`w-11 h-11 rounded-lg flex items-center justify-center shrink-0 border ${
                 ach.unlocked
-                  ? 'bg-amber-950/60 border-amber-600/60 text-amber-400 shadow-inner'
+                  ? 'bg-surface border-border text-amber-400'
                   : 'bg-surface-raised border-border text-text-muted'
               }`}
             >
@@ -106,9 +106,9 @@ export const AchievementsPage: React.FC = () => {
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-2 mb-1">
-                <h3 className="font-bold text-sm text-text-primary truncate">{ach.title}</h3>
+                <h3 className="font-semibold text-sm text-text-primary truncate">{ach.title}</h3>
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="text-[10px] font-mono text-amber-400/90 font-semibold bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">
+                  <span className="text-[11px] font-mono text-amber-400 font-medium bg-surface px-1.5 py-0.5 rounded border border-border">
                     +{ach.xpReward} XP
                   </span>
                   {ach.unlocked ? (

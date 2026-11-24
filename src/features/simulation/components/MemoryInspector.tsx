@@ -23,9 +23,9 @@ export const MemoryInspector: React.FC<MemoryInspectorProps> = ({
     <div className="flex flex-col h-full bg-surface select-none overflow-hidden">
       {/* Header */}
       <div className="p-3 border-b border-border bg-surface-raised/40 flex items-center justify-between shrink-0">
-        <div className="text-xs font-mono uppercase tracking-wider font-semibold text-text-secondary flex items-center gap-1.5">
+        <div className="text-xs font-mono font-medium text-text-secondary flex items-center gap-1.5">
           <Lock className="w-3.5 h-3.5 text-accent" />
-          <span>Memory & Synchronization</span>
+          <span>Memory and synchronization</span>
         </div>
         <span className="text-[11px] font-mono text-emerald-400">Live</span>
       </div>
@@ -36,24 +36,22 @@ export const MemoryInspector: React.FC<MemoryInspectorProps> = ({
         {activeDeadlock && (
           <div className="p-3 rounded-lg border border-rose-800 bg-rose-950/50 space-y-2 shadow-lg shadow-rose-950/40">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-bold text-rose-400 font-mono">
+              <div className="flex items-center gap-2 text-xs font-semibold text-rose-400 font-mono">
                 <Skull className="w-4 h-4 text-rose-400 shrink-0" />
-                <span>DEADLOCK DETECTED (Wait-For Cycle)</span>
+                <span>Deadlock detected (wait-for cycle)</span>
               </div>
               <Link
                 to="/app/learn/deadlocks"
                 className="text-[10px] font-mono text-rose-300 hover:underline flex items-center gap-1"
               >
                 <BookOpen className="w-3 h-3" />
-                Deadlock Guide
+                Deadlock guide
               </Link>
             </div>
 
             <div className="p-2 rounded bg-background/80 border border-rose-900/60 font-mono text-xs text-rose-300">
-              <span className="text-text-muted text-[10px] block uppercase mb-0.5">
-                Circular Wait Cycle:
-              </span>
-              <span className="font-bold">{activeDeadlock.cycle.join(' → ')}</span>
+              <span className="text-text-muted text-[10px] block mb-0.5">Circular wait cycle:</span>
+              <span className="font-semibold">{activeDeadlock.cycle.join(' → ')}</span>
             </div>
             <p className="text-[11px] font-mono text-text-secondary leading-relaxed">
               {activeDeadlock.explanation}
@@ -62,7 +60,7 @@ export const MemoryInspector: React.FC<MemoryInspectorProps> = ({
         )}
 
         {/* Shared Variables Table */}
-        <Panel title="Shared Variables" className="bg-background">
+        <Panel title="Shared variables" className="bg-background">
           {Object.keys(sharedMemory).length === 0 ? (
             <div className="text-xs font-mono text-text-muted italic py-2">
               No shared variables defined.
@@ -75,11 +73,13 @@ export const MemoryInspector: React.FC<MemoryInspectorProps> = ({
                   <th className="pb-1.5 text-right">Value</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/40">
+              <tbody className="divide-y border-border/40">
                 {Object.entries(sharedMemory).map(([name, val]) => (
                   <tr key={name} className="hover:bg-surface-raised/30 transition-colors">
                     <td className="py-2 text-text-secondary font-medium">{name}</td>
-                    <td className="py-2 text-right font-bold text-accent">{val}</td>
+                    <td className="py-2 text-right font-semibold text-accent tabular-nums">
+                      {val}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -89,7 +89,7 @@ export const MemoryInspector: React.FC<MemoryInspectorProps> = ({
 
         {/* Synchronization Locks / Mutexes Panel */}
         <Panel
-          title="Synchronization Locks (Mutexes)"
+          title="Synchronization locks (mutexes)"
           className="bg-background"
           headerAction={
             <Link
@@ -97,7 +97,7 @@ export const MemoryInspector: React.FC<MemoryInspectorProps> = ({
               className="text-[10px] font-mono text-accent hover:underline flex items-center gap-1"
             >
               <BookOpen className="w-3 h-3" />
-              Mutex Guide
+              Mutex guide
             </Link>
           }
         >
@@ -110,27 +110,27 @@ export const MemoryInspector: React.FC<MemoryInspectorProps> = ({
               {mutexes.map((m) => (
                 <div key={m.id} className="p-2.5 rounded bg-surface border border-border space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-text-primary font-bold">{m.id}</span>
+                    <span className="text-text-primary font-semibold">{m.id}</span>
                     {m.owner ? (
                       <Badge variant="danger" className="text-[10px]">
-                        OWNED BY {m.owner}
+                        Owned by {m.owner}
                       </Badge>
                     ) : (
                       <Badge variant="success" className="text-[10px]">
-                        FREE
+                        Free
                       </Badge>
                     )}
                   </div>
 
                   <div className="text-[11px] text-text-muted flex justify-between items-center border-t border-border/40 pt-1.5">
-                    <span>FIFO Waiting Queue:</span>
+                    <span>FIFO waiting queue:</span>
                     <span className="text-text-secondary font-medium">
                       {m.waitingQueue.length > 0 ? m.waitingQueue.join(', ') : 'Empty (0)'}
                     </span>
                   </div>
 
                   <div className="text-[10px] text-text-muted flex justify-between items-center border-t border-border/40 pt-1">
-                    <span>Release Clock:</span>
+                    <span>Release clock:</span>
                     <span className="text-accent">
                       [
                       {Object.entries(m.releaseClock.values)

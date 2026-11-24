@@ -20,8 +20,8 @@ describe('Phase 2 Visual Simulator: SimulationStudio Full Integration', () => {
     // Initial assertions
     expect(screen.getByText('Mission 01')).toBeInTheDocument();
     expect(screen.getByText('The Lost Update')).toBeInTheDocument();
-    expect(screen.getByText('Thread Explorer')).toBeInTheDocument();
-    expect(screen.getByText('Execution Timeline (Interleaving Lanes)')).toBeInTheDocument();
+    expect(screen.getByText(/Thread Explorer/i)).toBeInTheDocument();
+    expect(screen.getByText(/Execution Timeline \(Interleaving Lanes\)/i)).toBeInTheDocument();
 
     // Step 0 check
     expect(screen.getByText('Step 0 of 0')).toBeInTheDocument();

@@ -12,10 +12,10 @@ export const NotFoundPage: React.FC = () => {
         </div>
 
         <div className="space-y-2">
-          <div className="inline-block px-2.5 py-0.5 rounded text-xs font-mono font-semibold uppercase tracking-wider bg-rose-500/15 text-rose-400 border border-rose-500/30">
-            Error 404 • Thread Unreachable
+          <div className="inline-block px-2.5 py-0.5 rounded text-xs font-mono font-medium bg-surface-raised text-rose-400 border border-border">
+            404 • Thread unreachable
           </div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-text-primary">
+          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-text-primary">
             Instruction Pointer Lost
           </h1>
           <p className="text-sm text-text-secondary max-w-md mx-auto">

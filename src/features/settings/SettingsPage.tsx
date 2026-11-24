@@ -18,7 +18,7 @@ export const SettingsPage: React.FC = () => {
       <div className="pb-4 border-b border-border">
         <div className="flex items-center gap-2 mb-1">
           <Settings className="w-5 h-5 text-accent" />
-          <h1 className="text-2xl font-bold tracking-tight text-text-primary">
+          <h1 className="text-2xl font-semibold tracking-tight text-text-primary">
             Environment Settings
           </h1>
         </div>
@@ -30,9 +30,9 @@ export const SettingsPage: React.FC = () => {
       <div className="space-y-6">
         {/* Appearance */}
         <Card className="space-y-4">
-          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-text-secondary font-semibold border-b border-border pb-2">
+          <div className="flex items-center gap-2 text-xs font-mono text-text-secondary font-medium border-b border-border pb-2">
             <Moon className="w-4 h-4 text-accent" />
-            <span>Visual Theme</span>
+            <span>Visual theme</span>
           </div>
 
           <div className="flex items-center justify-between">
@@ -67,9 +67,9 @@ export const SettingsPage: React.FC = () => {
 
         {/* Execution Engine Defaults */}
         <Card className="space-y-4">
-          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-text-secondary font-semibold border-b border-border pb-2">
+          <div className="flex items-center gap-2 text-xs font-mono text-text-secondary font-medium border-b border-border pb-2">
             <Sliders className="w-4 h-4 text-accent" />
-            <span>Simulation Stepping</span>
+            <span>Simulation stepping</span>
           </div>
 
           <div className="flex items-center justify-between">
@@ -99,7 +99,7 @@ export const SettingsPage: React.FC = () => {
 
         {/* Typography */}
         <Card className="space-y-4">
-          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-text-secondary font-semibold border-b border-border pb-2">
+          <div className="flex items-center gap-2 text-xs font-mono text-text-secondary font-medium border-b border-border pb-2">
             <Type className="w-4 h-4 text-accent" />
             <span>Typography</span>
           </div>
@@ -119,9 +119,9 @@ export const SettingsPage: React.FC = () => {
 
         {/* Local Storage */}
         <Card className="space-y-4">
-          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-text-secondary font-semibold border-b border-border pb-2">
+          <div className="flex items-center gap-2 text-xs font-mono text-text-secondary font-medium border-b border-border pb-2">
             <Database className="w-4 h-4 text-accent" />
-            <span>Data Storage</span>
+            <span>Data storage</span>
           </div>
 
           <div className="flex items-center justify-between">

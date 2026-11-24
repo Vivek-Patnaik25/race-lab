@@ -36,19 +36,13 @@ export const MissionCompletionModal: React.FC<MissionCompletionModalProps> = ({
     >
       <div className="w-full max-w-xl bg-surface border border-border rounded-xl shadow-2xl overflow-hidden flex flex-col">
         {/* Modal Header */}
-        <div
-          className={`p-6 border-b flex items-start justify-between ${
-            isSuccess
-              ? 'bg-gradient-to-r from-emerald-950/40 via-surface-raised to-surface border-emerald-800/40'
-              : 'bg-gradient-to-r from-amber-950/40 via-surface-raised to-surface border-amber-800/40'
-          }`}
-        >
+        <div className="p-6 border-b border-border bg-surface-raised flex items-start justify-between">
           <div className="flex items-center gap-3">
             <div
-              className={`w-12 h-12 rounded-xl flex items-center justify-center border shadow-inner ${
+              className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
                 isSuccess
-                  ? 'bg-emerald-950/80 border-emerald-700/60 text-emerald-400'
-                  : 'bg-amber-950/80 border-amber-700/60 text-amber-400'
+                  ? 'bg-surface border-border text-emerald-400'
+                  : 'bg-surface border-border text-amber-400'
               }`}
             >
               {isSuccess ? <Trophy className="w-6 h-6" /> : <AlertCircle className="w-6 h-6" />}
@@ -56,19 +50,19 @@ export const MissionCompletionModal: React.FC<MissionCompletionModalProps> = ({
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span
-                  className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
+                  className={`text-xs font-mono font-medium px-2 py-0.5 rounded border ${
                     isSuccess
-                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                      : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                      ? 'bg-surface text-emerald-400 border-border'
+                      : 'bg-surface text-amber-400 border-border'
                   }`}
                 >
-                  {isSuccess ? 'Mission Accomplished' : 'Objective Unmet'}
+                  {isSuccess ? 'Mission complete' : 'Objective unmet'}
                 </span>
                 <span className="text-xs font-mono text-text-muted">
                   Mission {challenge.missionNumber}
                 </span>
               </div>
-              <h2 id="mission-modal-title" className="text-lg font-bold text-text-primary">
+              <h2 id="mission-modal-title" className="text-lg font-semibold text-text-primary">
                 {challenge.title}
               </h2>
             </div>
@@ -103,9 +97,9 @@ export const MissionCompletionModal: React.FC<MissionCompletionModalProps> = ({
                 {[1, 2, 3].map((starIdx) => (
                   <Star
                     key={starIdx}
-                    className={`w-7 h-7 transition-all ${
+                    className={`w-7 h-7 transition-colors ${
                       starIdx <= scoreResult.stars
-                        ? 'text-amber-400 fill-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]'
+                        ? 'text-amber-400 fill-amber-400'
                         : 'text-text-muted/30'
                     }`}
                   />
@@ -115,41 +109,39 @@ export const MissionCompletionModal: React.FC<MissionCompletionModalProps> = ({
               {/* Score Breakdown Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
                 <div className="p-3 bg-surface-raised rounded-lg border border-border">
-                  <div className="text-[10px] font-mono uppercase text-text-muted">Base</div>
-                  <div className="text-sm font-mono font-bold text-text-primary">
+                  <div className="text-xs font-mono text-text-muted">Base</div>
+                  <div className="text-sm font-mono font-semibold text-text-primary tabular-nums">
                     {scoreResult.baseScore}
                   </div>
                 </div>
 
                 <div className="p-3 bg-surface-raised rounded-lg border border-border">
-                  <div className="text-[10px] font-mono uppercase text-text-muted">Step Bonus</div>
-                  <div className="text-sm font-mono font-bold text-emerald-400">
+                  <div className="text-xs font-mono text-text-muted">Step bonus</div>
+                  <div className="text-sm font-mono font-semibold text-emerald-400 tabular-nums">
                     +{scoreResult.stepEfficiencyBonus}
                   </div>
-                  <div className="text-[9px] font-mono text-text-muted">
+                  <div className="text-[10px] font-mono text-text-muted tabular-nums">
                     {scoreResult.actualSteps}/{scoreResult.optimalSteps} steps
                   </div>
                 </div>
 
                 <div className="p-3 bg-surface-raised rounded-lg border border-border">
-                  <div className="text-[10px] font-mono uppercase text-text-muted">Hints</div>
+                  <div className="text-xs font-mono text-text-muted">Hints</div>
                   <div
-                    className={`text-sm font-mono font-bold ${
+                    className={`text-sm font-mono font-semibold tabular-nums ${
                       scoreResult.hintPenalty > 0 ? 'text-rose-400' : 'text-text-muted'
                     }`}
                   >
                     -{scoreResult.hintPenalty}
                   </div>
-                  <div className="text-[9px] font-mono text-text-muted">
+                  <div className="text-[10px] font-mono text-text-muted">
                     {scoreResult.hintsUsed} used
                   </div>
                 </div>
 
-                <div className="p-3 bg-accent/20 rounded-lg border border-accent/40">
-                  <div className="text-[10px] font-mono uppercase text-accent font-semibold">
-                    Total
-                  </div>
-                  <div className="text-base font-mono font-bold text-white">
+                <div className="p-3 bg-surface-raised rounded-lg border border-border">
+                  <div className="text-xs font-mono text-text-muted">Total</div>
+                  <div className="text-base font-mono font-semibold text-accent tabular-nums">
                     {scoreResult.totalScore}
                   </div>
                 </div>
@@ -157,9 +149,9 @@ export const MissionCompletionModal: React.FC<MissionCompletionModalProps> = ({
 
               {/* Educational Explanation Box */}
               <div className="p-4 rounded-lg bg-surface-raised/60 border border-border space-y-2">
-                <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-accent">
+                <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-accent">
                   <BookOpen className="w-3.5 h-3.5" />
-                  <span>Engineering Takeaway</span>
+                  <span>Engineering takeaway</span>
                 </div>
                 <p className="text-xs text-text-secondary leading-relaxed font-sans">
                   {challenge.explanation}
@@ -172,17 +164,17 @@ export const MissionCompletionModal: React.FC<MissionCompletionModalProps> = ({
         {/* Modal Actions */}
         <div className="p-4 border-t border-border bg-surface-raised/40 flex items-center justify-between">
           <Button variant="ghost" size="sm" onClick={onRetry}>
-            <RotateCcw className="w-3.5 h-3.5" /> Retry Scenario
+            <RotateCcw className="w-3.5 h-3.5" /> Retry scenario
           </Button>
 
           <div className="flex items-center gap-2">
             <Button variant="secondary" size="sm" onClick={onClose}>
-              Inspect Result
+              Inspect result
             </Button>
 
             {isSuccess && onNextMission && (
               <Button variant="primary" size="sm" onClick={onNextMission}>
-                Next Mission <ArrowRight className="w-3.5 h-3.5" />
+                Next mission <ArrowRight className="w-3.5 h-3.5" />
               </Button>
             )}
           </div>

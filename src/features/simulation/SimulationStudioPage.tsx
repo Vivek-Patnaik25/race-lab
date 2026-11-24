@@ -44,7 +44,7 @@ export const SimulationStudioPage: React.FC = () => {
           'In custom scenarios, observing interleavings helps discover concurrency race conditions and test mutual exclusion guards before running in production.',
         evaluateSuccess: (s) => ({
           isSuccess: true,
-          reason: `Custom scenario evaluated successfully! Executed ${s.currentStep} steps across ${s.threads.length} threads with ${s.activeRaces.length} data races detected.`,
+          reason: `Custom scenario evaluated. Executed ${s.currentStep} steps across ${s.threads.length} threads with ${s.activeRaces.length} data races detected.`,
         }),
       }
     : currentIdx >= 0
@@ -227,26 +227,26 @@ export const SimulationStudioPage: React.FC = () => {
     switch (state.status) {
       case 'DEADLOCKED':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-rose-950/60 text-rose-400 border border-rose-800 font-semibold uppercase">
-            <Skull className="w-3.5 h-3.5" /> DEADLOCKED
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-rose-950/50 text-rose-300 border border-rose-800/60 font-medium text-xs">
+            <Skull className="w-3.5 h-3.5" /> Deadlocked
           </span>
         );
       case 'COMPLETED':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-950/60 text-blue-400 border border-blue-800 font-semibold uppercase">
-            <CheckCircle className="w-3.5 h-3.5" /> COMPLETED
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-950/50 text-blue-300 border border-blue-800/60 font-medium text-xs">
+            <CheckCircle className="w-3.5 h-3.5" /> Completed
           </span>
         );
       case 'RUNNING':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800 font-semibold uppercase">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> RUNNING
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-950/50 text-emerald-300 border border-emerald-800/60 font-medium text-xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Running
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-surface-raised text-text-secondary border border-border font-semibold uppercase">
-            STEP READY
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-surface-raised text-text-secondary border border-border font-medium text-xs">
+            Step ready
           </span>
         );
     }

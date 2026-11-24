@@ -32,9 +32,9 @@ test.describe('RaceLab E2E Suite', () => {
       localStorage.setItem('racelab_onboarding_completed', 'true');
     });
     await page.goto('/app/simulate/mission-01');
-    await expect(page.locator('text=Thread Explorer')).toBeVisible();
-    await expect(page.locator('text=Execution Timeline')).toBeVisible();
-    await expect(page.locator('text=Memory & Sync')).toBeVisible();
+    await expect(page.locator('text=/Thread Explorer/i')).toBeVisible();
+    await expect(page.locator('text=/Execution Timeline/i')).toBeVisible();
+    await expect(page.locator('text=/Memory and synchronization/i')).toBeVisible();
   });
 
   test('toggles keyboard shortcuts modal in simulation studio', async ({ page }) => {
@@ -42,7 +42,7 @@ test.describe('RaceLab E2E Suite', () => {
       localStorage.setItem('racelab_onboarding_completed', 'true');
     });
     await page.goto('/app/simulate/mission-01');
-    await expect(page.locator('text=Thread Explorer')).toBeVisible();
+    await expect(page.locator('text=/Thread Explorer/i')).toBeVisible();
     await page.keyboard.press('?');
     const shortcutsHeading = page.getByRole('heading', { name: 'Keyboard Shortcuts' });
     await expect(shortcutsHeading).toBeVisible();

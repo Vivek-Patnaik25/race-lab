@@ -261,7 +261,7 @@ export const LabPage: React.FC = () => {
                 <button
                   key={t.id}
                   onClick={() => setSelectedThreadId(t.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all flex items-center gap-2 cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors flex items-center gap-2 cursor-pointer ${
                     t.id === activeThread?.id
                       ? 'bg-surface-raised border border-accent/60 text-white shadow-sm'
                       : 'text-text-secondary hover:text-text-primary hover:bg-surface-raised/40'
@@ -310,7 +310,7 @@ export const LabPage: React.FC = () => {
                   <div className="flex items-center gap-1 bg-surface p-1 rounded border border-border">
                     <button
                       onClick={() => updateThreadColor(activeThread.id, 'thread-a')}
-                      className={`w-4 h-4 rounded-full bg-blue-500 transition-all ${
+                      className={`w-4 h-4 rounded-full bg-blue-500 transition-transform duration-100 ${
                         activeThread.color === 'thread-a'
                           ? 'ring-2 ring-white scale-110'
                           : 'opacity-50'
@@ -319,7 +319,7 @@ export const LabPage: React.FC = () => {
                     />
                     <button
                       onClick={() => updateThreadColor(activeThread.id, 'thread-b')}
-                      className={`w-4 h-4 rounded-full bg-purple-500 transition-all ${
+                      className={`w-4 h-4 rounded-full bg-purple-500 transition-transform duration-100 ${
                         activeThread.color === 'thread-b'
                           ? 'ring-2 ring-white scale-110'
                           : 'opacity-50'
@@ -328,7 +328,7 @@ export const LabPage: React.FC = () => {
                     />
                     <button
                       onClick={() => updateThreadColor(activeThread.id, 'thread-c')}
-                      className={`w-4 h-4 rounded-full bg-amber-500 transition-all ${
+                      className={`w-4 h-4 rounded-full bg-amber-500 transition-transform duration-100 ${
                         activeThread.color === 'thread-c'
                           ? 'ring-2 ring-white scale-110'
                           : 'opacity-50'
@@ -396,7 +396,7 @@ export const LabPage: React.FC = () => {
                       <button
                         onClick={() => removeInstruction(activeThread.id, i)}
                         aria-label={`Remove instruction ${i + 1}`}
-                        className="opacity-0 group-hover:opacity-100 p-1 text-text-muted hover:text-rose-400 transition-all rounded"
+                        className="opacity-0 group-hover:opacity-100 p-1 text-text-muted hover:text-rose-400 transition-opacity rounded"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>

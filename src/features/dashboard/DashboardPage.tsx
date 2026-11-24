@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Play, FlaskConical, Trophy, CheckCircle2, ArrowRight, Zap, Sparkles } from 'lucide-react';
+import { Play, FlaskConical, Trophy, CheckCircle2, ArrowRight, Zap, Compass } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
@@ -17,11 +17,11 @@ export const DashboardPage: React.FC = () => {
       {/* Welcome Banner */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-border">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-text-primary">
+          <h1 className="text-2xl font-semibold tracking-tight text-text-primary">
             Engineering Console
           </h1>
           <p className="text-sm text-text-secondary mt-1">
-            Break concurrency bugs. Investigate memory states, scheduling anomalies, and
+            Debug concurrency anomalies. Inspect memory states, scheduling interleavings, and
             synchronization primitives.
           </p>
         </div>
@@ -42,13 +42,13 @@ export const DashboardPage: React.FC = () => {
       {/* Grid: Recommended Mission & Quick Lab */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recommended Challenge Card (Col span 2) */}
-        <div className="lg:col-span-2 space-y-4">
-          <div className="text-xs font-mono uppercase tracking-wider text-text-muted flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-accent" />
-            <span>Recommended Next Challenge</span>
+        <div className="lg:col-span-2 space-y-3">
+          <div className="text-xs font-mono text-text-muted flex items-center gap-1.5">
+            <Compass className="w-3.5 h-3.5 text-accent" />
+            <span>Recommended challenge</span>
           </div>
 
-          <Card className="border-accent/40 bg-gradient-to-br from-surface to-surface-raised relative overflow-hidden">
+          <Card className="border-border bg-surface relative overflow-hidden">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-2">
@@ -59,12 +59,14 @@ export const DashboardPage: React.FC = () => {
                   </span>
                   {nextProgress?.completed && (
                     <Badge variant="success" className="text-[10px]">
-                      COMPLETED
+                      Completed
                     </Badge>
                   )}
                 </div>
-                <h2 className="text-xl font-bold text-text-primary mb-2">{nextChallenge.title}</h2>
-                <p className="text-sm text-text-secondary leading-relaxed mb-4">
+                <h2 className="text-lg font-semibold text-text-primary mb-2">
+                  {nextChallenge.title}
+                </h2>
+                <p className="text-xs text-text-secondary leading-relaxed mb-4">
                   {nextChallenge.shortDescription}
                 </p>
                 <div className="text-xs font-mono text-text-muted bg-background/60 p-2.5 rounded border border-border">
@@ -95,21 +97,21 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Progress & Overview (Col span 1) */}
-        <div className="space-y-4">
-          <div className="text-xs font-mono uppercase tracking-wider text-text-muted flex items-center gap-1.5">
+        <div className="space-y-3">
+          <div className="text-xs font-mono text-text-muted flex items-center gap-1.5">
             <Trophy className="w-3.5 h-3.5 text-amber-400" />
-            <span>Progression Overview</span>
+            <span>Progression overview</span>
           </div>
 
           <Card className="space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-border">
               <span className="text-sm text-text-secondary">Total Experience</span>
-              <span className="font-mono font-bold text-amber-400">{xp} XP</span>
+              <span className="font-mono font-semibold text-amber-400 tabular-nums">{xp} XP</span>
             </div>
 
             <div className="flex items-center justify-between pb-3 border-b border-border">
               <span className="text-sm text-text-secondary">Completed Missions</span>
-              <span className="font-mono font-bold text-text-primary">
+              <span className="font-mono font-semibold text-text-primary tabular-nums">
                 {completedMissionsCount} / {CHALLENGES.length}
               </span>
             </div>
@@ -130,18 +132,18 @@ export const DashboardPage: React.FC = () => {
                       key={ach.id}
                       className="p-2.5 rounded bg-surface-raised border border-border flex items-center gap-3"
                     >
-                      <div className="w-7 h-7 rounded bg-amber-950/40 border border-amber-700/50 flex items-center justify-center text-amber-400">
+                      <div className="w-7 h-7 rounded bg-surface border border-border flex items-center justify-center text-amber-400">
                         <Zap className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-text-primary">{ach.title}</div>
+                        <div className="text-xs font-semibold text-text-primary">{ach.title}</div>
                         <div className="text-[11px] text-text-muted">{ach.description}</div>
                       </div>
                     </div>
                   ))
               ) : (
                 <div className="p-2.5 rounded bg-surface-raised/40 border border-border/60 text-xs font-mono text-text-muted">
-                  No achievements unlocked yet. Step into a mission to earn badges!
+                  No achievements unlocked yet. Complete missions to earn badges.
                 </div>
               )}
             </div>
@@ -150,11 +152,11 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* Available Missions Quick Selector */}
-      <div className="space-y-4">
+      <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <div className="text-xs font-mono uppercase tracking-wider text-text-muted flex items-center gap-1.5">
+          <div className="text-xs font-mono text-text-muted flex items-center gap-1.5">
             <CheckCircle2 className="w-3.5 h-3.5 text-text-secondary" />
-            <span>Missions Roster</span>
+            <span>Missions roster</span>
           </div>
           <Link to="/app/challenges" className="text-xs text-accent hover:underline font-mono">
             Full Catalogue →
@@ -174,7 +176,7 @@ export const DashboardPage: React.FC = () => {
                       {mission.estimatedDuration}
                     </span>
                   </div>
-                  <h3 className="font-bold text-sm text-text-primary mb-1">{mission.title}</h3>
+                  <h3 className="font-semibold text-sm text-text-primary mb-1">{mission.title}</h3>
                   <p className="text-xs text-text-secondary line-clamp-2">
                     {mission.shortDescription}
                   </p>
@@ -183,7 +185,7 @@ export const DashboardPage: React.FC = () => {
                   <span className="text-[11px] font-mono text-accent">{mission.concept}</span>
                   <Link to={`/app/simulate/${mission.id}`}>
                     <Button variant={isDone ? 'secondary' : 'ghost'} size="sm">
-                      {isDone ? 'Replay' : 'Launch →'}
+                      {isDone ? 'Replay' : 'Launch'}
                     </Button>
                   </Link>
                 </div>

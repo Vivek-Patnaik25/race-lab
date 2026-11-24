@@ -249,21 +249,21 @@ export const RaceConditionWidget: React.FC = () => {
       {isComplete ? (
         isLostUpdate ? (
           <div className="p-3.5 rounded-lg border border-rose-800/80 bg-rose-950/40 text-xs space-y-1.5 text-rose-300">
-            <div className="flex items-center gap-2 font-bold text-rose-400">
+            <div className="flex items-center gap-2 font-semibold text-rose-400">
               <AlertTriangle className="w-4 h-4 shrink-0" />
-              <span>LOST UPDATE CONFIRMED (Data Race Anomaly)</span>
+              <span>Lost update detected (data race anomaly)</span>
             </div>
             <p className="text-[11px] leading-relaxed text-text-secondary font-sans">
               Both threads performed concurrent increments starting from 0, but because both read
               the value before either wrote back, the final counter is <strong>1</strong> instead of{' '}
-              <strong>2</strong>. One entire increment was silently destroyed!
+              <strong>2</strong>. One entire increment was silently overwritten.
             </p>
           </div>
         ) : (
           <div className="p-3.5 rounded-lg border border-emerald-800/80 bg-emerald-950/40 text-xs space-y-1.5 text-emerald-300">
-            <div className="flex items-center gap-2 font-bold text-emerald-400">
+            <div className="flex items-center gap-2 font-semibold text-emerald-400">
               <CheckCircle className="w-4 h-4 shrink-0" />
-              <span>SERIAL / SAFE EXECUTION (No Lost Update)</span>
+              <span>Safe execution (no lost update)</span>
             </div>
             <p className="text-[11px] leading-relaxed text-text-secondary font-sans">
               One thread completed its write before the other thread read the updated counter. The
@@ -273,9 +273,7 @@ export const RaceConditionWidget: React.FC = () => {
         )
       ) : history.length > 0 ? (
         <div className="p-3 rounded-lg border border-border/60 bg-background text-xs space-y-1">
-          <div className="text-[10px] uppercase tracking-wider text-text-muted font-bold">
-            Execution Interleaving Log:
-          </div>
+          <div className="text-xs text-text-muted font-medium">Execution interleaving log</div>
           <div className="space-y-0.5 max-h-24 overflow-y-auto text-[11px] text-text-secondary font-mono">
             {history.map((item, i) => (
               <div key={i} className="flex items-center gap-2">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Minus, GitMerge, Sparkles, Check, AlertTriangle } from 'lucide-react';
+import { Plus, Minus, GitMerge, Check, AlertTriangle } from 'lucide-react';
 import { Button } from '../../../components/ui/Button';
 import { createVectorClock, isLessThanOrEqual, mergeClocks } from '../../../engine';
 
@@ -42,9 +42,9 @@ export const VectorClockWidget: React.FC = () => {
     <div className="p-4 rounded-lg border border-border bg-surface space-y-4 font-mono">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-3">
         <div>
-          <h3 className="text-sm font-bold text-text-primary flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-accent" />
-            Interactive Vector Clock Comparator
+          <h3 className="text-sm font-semibold text-text-primary flex items-center gap-2">
+            <GitMerge className="w-4 h-4 text-accent" />
+            Vector clock comparator
           </h3>
           <p className="text-xs text-text-muted mt-0.5 font-sans">
             Adjust logical timestamps across Thread A and Thread B to see happens-before evaluation.

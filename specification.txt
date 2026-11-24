@@ -1,0 +1,1236 @@
+# RaceLab — Product Specification & Engineering Blueprint
+
+**Product:** RaceLab  
+**Tagline:** Break concurrency. Understand the chaos. Master the system.  
+**Product type:** Interactive web application  
+**Architecture:** Local-first, modular frontend + deterministic simulation engine  
+**Primary audience:** Software developers, computer science students and engineering enthusiasts  
+**Target release:** November 28, 2026  
+**AI dependency:** None
+
+---
+
+# 1. Product vision
+
+RaceLab is an interactive environment where people can experiment with concurrent execution, reproduce synchronization bugs, inspect memory and learn how operating systems and multithreaded programs behave.
+
+The product combines three experiences:
+
+1. **Learn:** Understand concurrency through interactive visual explanations.
+2. **Play:** Complete debugging challenges, earn achievements and progress through levels.
+3. **Experiment:** Build custom thread programs, control scheduling and investigate execution.
+
+RaceLab should not feel like a conventional educational website.
+
+It should feel like opening a professional debugging environment that also happens to be a game.
+
+## Core product loop
+
+1. Select a challenge.
+2. Inspect the thread programs.
+3. Start execution.
+4. Observe the shared memory.
+5. Discover unexpected behaviour.
+6. Rewind and investigate.
+7. Fix the synchronization problem.
+8. Pass the challenge and unlock the next one.
+
+## Product principles
+
+- Every simulation must be reproducible.
+- Every state transition must be explainable.
+- Users must be able to control execution.
+- Visualisations must represent actual engine state, not decorative animations.
+- The simulation engine must be independent of the frontend.
+- No arbitrary user code execution in the initial release.
+- The product must remain useful without signing in or connecting external services.
+
+# 2. Target users
+
+### Persona A — The learner
+
+A computer science student who understands what a race condition is theoretically but struggles to visualise why it happens.
+
+Needs:
+- Simple explanations.
+- Step-by-step execution.
+- Interactive examples.
+- Guided challenges.
+
+### Persona B — The developer
+
+Someone who understands programming but wants to experiment with thread scheduling, mutexes and memory access.
+
+Needs:
+- Precise execution history.
+- Shared memory inspection.
+- Manual scheduling.
+- Synchronization analysis.
+
+### Persona C — The engineering enthusiast
+
+Someone who likes experimenting, breaking systems and solving technical puzzles.
+
+Needs:
+- Sandbox mode.
+- Difficult challenges.
+- Interesting failure scenarios.
+- Achievements and progression.
+
+# 3. Product modes
+
+RaceLab will have two primary experiences.
+
+## A. Challenge Mode
+
+A structured game experience.
+
+Features:
+- Curated missions.
+- Progressive difficulty.
+- Objectives and constraints.
+- Hints.
+- Score calculation.
+- Achievements.
+- Challenge completion reports.
+
+Example:
+
+**Mission 01 — The Lost Update**
+
+Objective: Reproduce a race condition that causes two increments to become one.
+
+**Mission 02 — Banking Disaster**
+
+Objective: Investigate concurrent deposits and withdrawals.
+
+**Mission 03 — Mutex Rescue**
+
+Objective: Fix the banking race condition using a mutex.
+
+**Mission 04 — Deadlock City**
+
+Objective: Investigate two threads waiting indefinitely for one another.
+
+**Mission 05 — Semaphore Bridge**
+
+Objective: Restrict concurrent access to a limited-capacity resource.
+
+## B. Lab Mode
+
+An open-ended professional simulation environment.
+
+Features:
+- Create threads.
+- Add instructions.
+- Define shared variables.
+- Define local variables.
+- Create mutexes.
+- Choose scheduling algorithms.
+- Manually select the executing thread.
+- Inspect memory and execution history.
+- Export simulation scenarios.
+
+Lab Mode is where the product can grow beyond an educational game.
+
+# 4. Functional requirements
+
+## 4.1 Thread management
+
+Each thread must contain:
+
+- Unique ID.
+- Display name.
+- Instruction list.
+- Program counter.
+- Local memory.
+- Execution status.
+- Vector clock.
+- Optional colour for visual identification.
+
+Thread statuses:
+
+| Status | Meaning |
+|---|---|
+| READY | Eligible to execute |
+| BLOCKED | Waiting for a synchronization operation |
+| COMPLETED | All instructions executed |
+
+A thread must never execute while blocked or completed.
+
+## 4.2 Instruction set
+
+The first version will implement a deliberately small instruction language.
+
+| Instruction | Meaning |
+|---|---|
+| READ | Read a shared variable into local memory |
+| ADD | Add a number to a local variable |
+| WRITE | Write a local variable into shared memory |
+| LOCK | Acquire a mutex |
+| UNLOCK | Release a mutex |
+
+Example:
+
+```text
+Thread A
+
+READ counter INTO a
+ADD a BY 1
+WRITE a INTO counter
+```
+
+```text
+Thread B
+
+READ counter INTO b
+ADD b BY 1
+WRITE b INTO counter
+```
+
+Use a typed instruction representation internally. The readable syntax is only a presentation layer.
+
+Do not execute instructions using JavaScript eval, new Function, or dynamically generated executable code.
+
+## 4.3 Memory management
+
+Two memory categories:
+
+**Shared memory**
+- Variables accessible by multiple threads.
+- All READ and WRITE operations interact with this memory.
+- Every change must be recorded in execution history.
+
+**Thread-local memory**
+- Each thread has its own variables.
+- ADD modifies local values only.
+- A thread cannot access another thread's local memory.
+
+The initial version should support numeric variables. Additional types can be added later.
+
+## 4.4 Scheduler
+
+Support three scheduling modes.
+
+**Manual scheduling**
+
+The user chooses the next eligible thread.
+
+This is the most important mode because it lets people intentionally reproduce bugs.
+
+**Round Robin**
+
+Threads receive execution opportunities in a deterministic rotation.
+
+**Seeded Random**
+
+Random scheduling using a stored seed, allowing the same random execution sequence to be reproduced.
+
+The automatic scheduler must skip blocked and completed threads.
+
+## 4.5 Synchronization
+
+Implement mutexes with:
+
+- Owner tracking.
+- Waiting queues.
+- Fair FIFO acquisition.
+- Blocking behaviour.
+- Ownership validation.
+- Wake-up handling.
+
+A mutex can only be unlocked by its owner.
+
+When a lock is unavailable:
+- The requesting thread becomes BLOCKED.
+- Its program counter remains at the LOCK instruction.
+- The thread cannot execute again until eligible.
+
+When a lock is released:
+- The oldest waiting thread becomes READY.
+- Other waiting threads remain blocked.
+- The eligible thread acquires the available mutex when scheduled.
+
+This avoids lock barging and gives predictable fairness.
+
+A thread must not silently complete while still holding a mutex. Treat that as an invalid program state with a useful error.
+
+## 4.6 Race detection
+
+This is one of RaceLab's most important engineering components.
+
+Do not identify races merely by checking whether two threads accessed the same variable.
+
+Implement a happens-before model using vector clocks.
+
+Each thread maintains a vector clock.
+
+Rules:
+
+- Instructions follow program order within a thread.
+- Mutex release publishes the releasing thread's clock.
+- Successful mutex acquisition merges the published clock.
+- Each instruction advances the executing thread's clock.
+- Shared memory accesses record their clocks.
+
+For each shared variable, maintain:
+- Last write.
+- Outstanding reads.
+- Accessing thread.
+- Access vector clock.
+
+A conflicting access is considered a data race when there is no happens-before ordering between the conflicting accesses and at least one access is a write.
+
+For example:
+
+```text
+Thread A reads counter
+Thread B writes counter
+```
+
+Without synchronization, this should produce a race report.
+
+With a correctly used mutex, the protected accesses should be ordered and should not be reported as a data race.
+
+The race detector must avoid reporting read/read operations as conflicting accesses.
+
+Race reports should include:
+- Variable name.
+- First thread.
+- Second thread.
+- Access types.
+- Execution steps.
+- Explanation.
+- Suggested investigation path.
+
+## 4.7 Deadlock detection
+
+Implement a wait-for graph.
+
+A blocked thread points to the thread owning the mutex it needs.
+
+Detect cycles in this graph.
+
+Example:
+
+```text
+Thread A waits for Mutex B
+Thread B waits for Mutex A
+
+A → B → A
+```
+
+Display:
+- Deadlocked threads.
+- Mutex owners.
+- Waiting relationships.
+- The cycle causing the deadlock.
+
+Use graph cycle detection such as DFS or strongly connected components.
+
+## 4.8 Execution history
+
+Every executed instruction and meaningful scheduling transition must create an event.
+
+Store:
+- Step number.
+- Thread ID.
+- Instruction.
+- Previous memory state.
+- Resulting memory state.
+- Previous and resulting thread states.
+- Race reports generated.
+- Synchronization changes.
+- Explanatory message.
+
+For the initial release, store immutable state snapshots per step.
+
+This enables:
+- Step forward.
+- Step backward.
+- Reset.
+- Replay.
+- Inspect previous states.
+
+Optimised checkpoint-based history can be introduced later if memory usage becomes significant.
+
+# 5. Detailed UI architecture
+
+## 5.1 Application navigation
+
+Recommended routes:
+
+```text
+/
+  Landing page
+
+/app
+  Dashboard
+
+/app/challenges
+  Challenge selection
+
+/app/challenges/:id
+  Challenge details
+
+/app/simulate/:id
+  Active challenge simulation
+
+/app/lab
+  Custom simulation builder
+
+/app/history/:id
+  Saved simulation and replay
+
+/app/learn
+  Learning centre
+
+/app/learn/:concept
+  Concept explanation
+
+/app/achievements
+  Achievements and progression
+
+/app/settings
+  Application preferences
+```
+
+The user should not need authentication.
+
+## 5.2 Global application shell
+
+Desktop layout:
+
+```text
+┌──────────────────────────────────────────────────────┐
+│ RaceLab                         XP     Settings      │
+├──────────────┬───────────────────────────────────────┤
+│              │                                       │
+│ Dashboard    │                                       │
+│              │            MAIN CONTENT               │
+│ Challenges   │                                       │
+│              │                                       │
+│ Lab          │                                       │
+│              │                                       │
+│ Learn        │                                       │
+│              │                                       │
+│ Achievements │                                       │
+│              │                                       │
+│ Settings     │                                       │
+│              │                                       │
+└──────────────┴───────────────────────────────────────┘
+```
+
+Use a collapsible sidebar.
+
+On mobile, use a compact navigation pattern rather than attempting to shrink the desktop simulator into an unusable layout.
+
+## 5.3 Dashboard
+
+The dashboard should answer three questions:
+
+- What should I play next?
+- What have I already completed?
+- What can I experiment with?
+
+Components:
+
+1. Welcome header.
+2. Continue simulation card.
+3. Recommended challenge.
+4. Challenge progress.
+5. Achievement highlights.
+6. Quick launch to Lab Mode.
+7. Recent simulation history.
+
+Avoid excessive dashboard cards. Keep the interface focused.
+
+## 5.4 Challenge selection
+
+Use a mission-based layout.
+
+Each challenge card displays:
+- Mission number.
+- Title.
+- Difficulty.
+- Estimated duration.
+- Primary learning concept.
+- Completion status.
+- Best score.
+
+Difficulty tiers:
+
+| Tier | Description |
+|---|---|
+| Beginner | Basic thread execution |
+| Intermediate | Shared-memory conflicts |
+| Advanced | Synchronization |
+| Expert | Deadlocks and complex interactions |
+
+## 5.5 Simulation Studio
+
+This is the heart of RaceLab.
+
+Desktop layout:
+
+```text
+┌─────────────────────────────────────────────────────────┐
+│ Mission 01: Lost Update             RUNNING / PAUSED     │
+├─────────────┬───────────────────────┬───────────────────┤
+│ THREADS     │ EXECUTION TIMELINE    │ MEMORY INSPECTOR  │
+│             │                       │                   │
+│ Thread A    │ A  ──●──●──────●       │ counter = 1       │
+│             │ B  ─────●──●──●       │                   │
+│ Thread B    │                       │ Local A: a = 1    │
+│             │                       │ Local B: b = 1    │
+│             │                       │                   │
+│             │                       │ RACE REPORTS      │
+├─────────────┴───────────────────────┴───────────────────┤
+│              EXECUTION CONTROLS                         │
+│             ◀ Back   ▶ Step   ▶ Play   ↻ Reset          │
+└─────────────────────────────────────────────────────────┘
+```
+
+The studio contains:
+
+**Left: Thread Explorer**
+- Thread cards.
+- Instruction list.
+- Current instruction highlight.
+- Program counter.
+- Thread status.
+- Local variables.
+
+**Centre: Execution Timeline**
+- One lane per thread.
+- Execution events.
+- Synchronization markers.
+- Race-condition markers.
+- Current execution position.
+
+**Right: Memory Inspector**
+- Shared variables.
+- Local variables.
+- Mutex states.
+- Read/write activity.
+- Race reports.
+
+**Bottom: Execution Controls**
+- Previous step.
+- Next step.
+- Play/pause.
+- Reset.
+- Execution speed.
+- Scheduling mode.
+
+The visualisation must be generated from actual simulation events.
+
+## 5.6 Race report panel
+
+An example:
+
+```text
+DATA RACE DETECTED
+
+Variable: counter
+
+Thread A: READ
+Execution step: 2
+
+Thread B: WRITE
+Execution step: 5
+
+Synchronization:
+No happens-before ordering found.
+
+Impact:
+A concurrent write may overwrite
+another thread's update.
+
+[Inspect accesses]
+```
+
+Reports should be educational, not just coloured warnings.
+
+## 5.7 Visual direction
+
+Design language: premium dark developer tooling.
+
+Avoid a generic admin-dashboard appearance.
+
+Recommended direction:
+
+- Deep charcoal background.
+- Layered dark panels.
+- Subtle borders.
+- Clear contrast between active and inactive states.
+- A restrained accent colour system.
+- Monospaced typography for instructions.
+- Highly legible UI typography.
+- Smooth but restrained animations.
+- Consistent colours for thread identities.
+
+Suggested design tokens:
+
+```css
+:root {
+  --background: #090D14;
+  --surface: #111827;
+  --surface-raised: #172033;
+  --border: #253149;
+
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+
+  --accent: #8B5CF6;
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+
+  --thread-a: #3B82F6;
+  --thread-b: #A78BFA;
+  --thread-c: #F59E0B;
+}
+```
+
+These are initial design tokens, not immutable colours.
+
+Use design tokens consistently so the interface can evolve without rewriting every component.
+
+Respect reduced-motion preferences and maintain accessible contrast.
+
+# 6. Technical architecture
+
+## Recommended stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React + TypeScript |
+| Build system | Vite |
+| Routing | React Router |
+| Styling | Tailwind CSS |
+| Application state | Zustand |
+| Animation | CSS transitions, Motion where useful |
+| Visualisation | Custom SVG |
+| Persistence | IndexedDB |
+| Unit testing | Vitest |
+| Component testing | React Testing Library |
+| End-to-end testing | Playwright |
+| Code quality | ESLint + Prettier |
+| Hosting | Static hosting such as Vercel or Netlify |
+
+Keep the simulation engine framework-independent.
+
+## Architecture layers
+
+```text
+Presentation
+    |
+    v
+React Components
+    |
+    v
+Application State / Controllers
+    |
+    v
+Simulation Engine
+    |
+    +---- Scheduler
+    |
+    +---- Executor
+    |
+    +---- Memory
+    |
+    +---- Synchronization
+    |
+    +---- Race Detector
+    |
+    +---- Deadlock Detector
+    |
+    +---- History
+    |
+    v
+Simulation Events and Snapshots
+```
+
+Important boundaries:
+
+- React must not implement instruction execution.
+- Zustand must not become the simulation engine.
+- The simulation engine must not depend on browser APIs.
+- Persistence must not change simulation semantics.
+- Visualisations must consume engine state rather than duplicate it.
+
+## Recommended project structure
+
+```text
+racelab/
+├── public/
+│
+├── src/
+│   ├── app/
+│   │   ├── App.tsx
+│   │   ├── router.tsx
+│   │   └── providers.tsx
+│   │
+│   ├── components/
+│   │   ├── layout/
+│   │   └── ui/
+│   │
+│   ├── features/
+│   │   ├── dashboard/
+│   │   ├── challenges/
+│   │   ├── simulation/
+│   │   ├── lab/
+│   │   ├── learning/
+│   │   ├── achievements/
+│   │   └── settings/
+│   │
+│   ├── engine/
+│   │   ├── core/
+│   │   │   ├── types.ts
+│   │   │   ├── state.ts
+│   │   │   ├── executor.ts
+│   │   │   └── scheduler.ts
+│   │   │
+│   │   ├── memory/
+│   │   │   └── memory.ts
+│   │   │
+│   │   ├── synchronization/
+│   │   │   ├── mutex.ts
+│   │   │   └── synchronization.ts
+│   │   │
+│   │   ├── analysis/
+│   │   │   ├── vector-clock.ts
+│   │   │   ├── race-detector.ts
+│   │   │   └── deadlock-detector.ts
+│   │   │
+│   │   ├── history/
+│   │   │   └── history.ts
+│   │   │
+│   │   ├── scenarios/
+│   │   │   └── scenario-validator.ts
+│   │   │
+│   │   └── index.ts
+│   │
+│   ├── store/
+│   │   ├── simulation-store.ts
+│   │   ├── game-store.ts
+│   │   └── settings-store.ts
+│   │
+│   ├── data/
+│   │   ├── challenges/
+│   │   └── concepts/
+│   │
+│   ├── services/
+│   │   ├── persistence/
+│   │   └── export/
+│   │
+│   ├── lib/
+│   ├── styles/
+│   └── main.tsx
+│
+├── tests/
+│   ├── engine/
+│   ├── integration/
+│   └── e2e/
+│
+├── docs/
+│   ├── architecture.md
+│   ├── simulation-semantics.md
+│   └── challenges.md
+│
+├── AGENTS.md
+├── README.md
+└── package.json
+```
+
+# 7. Core data contracts
+
+Use explicit domain types.
+
+Example initial contract:
+
+```typescript
+export type ThreadStatus =
+  | "READY"
+  | "BLOCKED"
+  | "COMPLETED";
+
+export type Instruction =
+  | {
+      op: "READ";
+      source: string;
+      target: string;
+    }
+  | {
+      op: "ADD";
+      target: string;
+      value: number;
+    }
+  | {
+      op: "WRITE";
+      target: string;
+      source: string;
+    }
+  | {
+      op: "LOCK";
+      mutexId: string;
+    }
+  | {
+      op: "UNLOCK";
+      mutexId: string;
+    };
+
+export interface VectorClock {
+  values: Record<string, number>;
+}
+
+export interface ThreadState {
+  id: string;
+  name: string;
+  instructions: Instruction[];
+  programCounter: number;
+  localMemory: Record<string, number>;
+  status: ThreadStatus;
+  clock: VectorClock;
+}
+
+export interface MutexState {
+  id: string;
+  owner: string | null;
+  waitingQueue: string[];
+  releaseClock: VectorClock;
+}
+
+export interface SimulationState {
+  sharedMemory: Record<string, number>;
+  threads: ThreadState[];
+  mutexes: MutexState[];
+  currentStep: number;
+  status: "IDLE" | "RUNNING" | "PAUSED" | "COMPLETED" | "DEADLOCKED";
+}
+```
+
+Use immutable state transitions or carefully controlled mutation behind the engine API. Do not allow UI components to mutate engine state directly.
+
+# 8. Simulation engine execution contract
+
+Before implementing the visual interface, establish these rules.
+
+### READ
+
+1. Verify the shared variable exists.
+2. Advance the executing thread's vector clock.
+3. Check for conflicting unordered writes.
+4. Record the access.
+5. Copy the shared value into thread-local memory.
+6. Advance the program counter.
+
+### ADD
+
+1. Verify the local variable exists.
+2. Verify the operation is valid.
+3. Advance the vector clock.
+4. Modify the local value.
+5. Advance the program counter.
+
+### WRITE
+
+1. Verify source and destination variables.
+2. Advance the vector clock.
+3. Check the previous write and outstanding reads for conflicting unordered accesses.
+4. Record the new write.
+5. Update shared memory.
+6. Advance the program counter.
+
+### LOCK
+
+1. Check whether the mutex is free.
+2. Check whether the current thread is eligible under FIFO ordering.
+3. If unavailable, mark the thread BLOCKED and enqueue it without advancing its program counter.
+4. If available, merge the mutex release clock into the thread clock.
+5. Advance the thread clock.
+6. Set mutex ownership.
+7. Advance the program counter.
+
+### UNLOCK
+
+1. Verify mutex ownership.
+2. Advance the releasing thread's clock.
+3. Publish the mutex release clock.
+4. Clear mutex ownership.
+5. Wake the oldest waiting thread if one exists.
+6. Advance the program counter.
+
+These operations must be covered by tests before building advanced features.
+
+A failed instruction must leave the engine in a valid state. Avoid partially applied transitions.
+
+# 9. Persistence model
+
+RaceLab does not need a backend for the initial product.
+
+Use:
+
+**localStorage**
+- Theme preference.
+- UI preferences.
+- Small settings.
+
+**IndexedDB**
+- Saved simulation sessions.
+- Execution history.
+- Challenge progress.
+- Achievement records.
+- User-created scenarios.
+
+Include database schema versioning and migrations.
+
+Do not store every live UI interaction. Persist meaningful checkpoints and completed or explicitly saved sessions.
+
+# 10. Game mechanics
+
+## Progression
+
+Each challenge has:
+- Unique ID.
+- Title.
+- Description.
+- Difficulty.
+- Initial simulation state.
+- Success conditions.
+- Optional hints.
+- Educational explanation.
+- Completion reward.
+
+## Scoring
+
+A configurable score can consider:
+
+- Successful completion.
+- Correct final state.
+- Number of unnecessary execution steps.
+- Effective use of synchronization.
+- Number of hints used.
+- Avoiding deadlock.
+
+Keep scoring transparent. Never reward users for simply getting lucky with a schedule.
+
+## Achievements
+
+Initial examples:
+
+| Achievement | Requirement |
+|---|---|
+| First Race | Detect a data race |
+| Time Traveler | Rewind an execution |
+| Lock It Down | Complete a mutex challenge |
+| Chaos Controller | Use manual scheduling |
+| No More Deadlocks | Resolve a deadlock |
+| Bug Hunter | Complete five missions |
+
+Progress should be stored locally.
+
+# 11. Testing strategy
+
+The simulation engine is the highest-risk part of the product.
+
+Build comprehensive tests around it.
+
+## Unit tests
+
+Memory:
+- Read existing variables.
+- Reject missing variables.
+- Write valid values.
+- Isolate thread-local memory.
+
+Scheduler:
+- Manual scheduling.
+- Round Robin.
+- Seeded Random.
+- Skip blocked threads.
+- Skip completed threads.
+
+Synchronization:
+- Acquire free mutex.
+- Block on occupied mutex.
+- FIFO waiter handling.
+- Unlock ownership validation.
+- Mutex release and reacquisition ordering.
+
+Race detector:
+- Read/read does not trigger a race.
+- Unprotected read/write triggers a race.
+- Unprotected write/write triggers a race.
+- Mutex-protected accesses do not trigger a race.
+- Vector clock comparisons work correctly.
+
+Deadlock detector:
+- No cycle produces no deadlock.
+- Two-thread cycle is detected.
+- Multi-thread cycle is detected.
+- Unrelated blocked or completed threads are handled correctly.
+
+History:
+- Forward execution.
+- Backward navigation.
+- Reset.
+- Replay.
+- Snapshot consistency.
+
+## Integration tests
+
+Test complete scenarios from initial state to expected result.
+
+The most important integration test is:
+
+```text
+counter = 0
+
+A: READ counter INTO a
+A: ADD a BY 1
+A: WRITE a INTO counter
+
+B: READ counter INTO b
+B: ADD b BY 1
+B: WRITE b INTO counter
+
+Schedule:
+A READ
+B READ
+A ADD
+B ADD
+A WRITE
+B WRITE
+
+Expected final counter = 1
+Expected: race detected
+```
+
+Then test the mutex-protected version:
+
+Expected final counter = 2.  
+Expected: no unordered conflicting access inside the protected region.
+
+## E2E tests
+
+Use Playwright to verify:
+
+- Application loads.
+- Challenge list renders.
+- Mission can be opened.
+- Simulation can be started.
+- Next-step updates the timeline.
+- Memory inspector displays updated values.
+- Race report appears.
+- Backward execution restores the previous state.
+- Challenge completion updates progression.
+- Progress survives a page reload.
+
+# 12. Non-functional requirements
+
+**Performance**
+- Keep the engine responsive for normal teaching scenarios.
+- Avoid unnecessary UI rerenders.
+- Virtualise long histories if required.
+- Provide a way to reset oversized simulations.
+
+**Reliability**
+- Deterministic execution.
+- Explicit error handling.
+- Valid state transitions.
+- No silent simulation failures.
+
+**Security**
+- Do not execute user-provided JavaScript.
+- Do not use eval or new Function.
+- Validate imported scenario files.
+- Restrict the scenario language to supported instructions.
+- Keep the application local-first.
+
+**Accessibility**
+- Keyboard-operable simulation controls.
+- Screen-reader labels.
+- High-contrast text.
+- Do not communicate race states through colour alone.
+- Reduced-motion support.
+
+**Maintainability**
+- Strict TypeScript.
+- Small modules.
+- Document simulation semantics.
+- Automated regression tests.
+- No business logic in UI components.
+
+# 13. Implementation roadmap
+
+## Phase 0 — Repository and foundations
+
+Deliverables:
+- Vite + React + TypeScript project.
+- Tailwind styling.
+- Routing.
+- ESLint and Prettier.
+- Vitest.
+- Playwright.
+- AGENTS.md.
+- Initial architecture documentation.
+
+Acceptance criteria:
+- App runs locally.
+- Production build passes.
+- Tests run successfully.
+- No unnecessary dependencies.
+
+## Phase 1 — Simulation engine
+
+Deliverables:
+- Thread execution.
+- Shared memory.
+- Local memory.
+- Scheduler.
+- Mutexes.
+- Vector clocks.
+- Race detector.
+- Deadlock detector.
+- Execution history.
+
+Acceptance criteria:
+- Lost update can be reproduced.
+- Mutex can prevent lost update.
+- Race detection behaves correctly.
+- Deadlocks can be identified.
+- Replay is deterministic.
+- Engine tests pass independently of React.
+
+## Phase 2 — Simulation Studio
+
+Deliverables:
+- Thread panels.
+- Code/instruction display.
+- Memory inspector.
+- Timeline.
+- Execution controls.
+- Race report.
+- Mutex visualisation.
+
+Acceptance criteria:
+- Every UI value reflects real engine state.
+- Step forward and backward work.
+- Manual scheduling works.
+- Automatic execution can be paused and resumed.
+
+## Phase 3 — Game system
+
+Deliverables:
+- Challenge catalogue.
+- Five challenge definitions.
+- Success conditions.
+- Hints.
+- Score calculation.
+- Progress persistence.
+- Achievements.
+
+Acceptance criteria:
+- All challenges have verifiable completion rules.
+- Progress remains after reload.
+- Scores are deterministic for equivalent runs.
+
+## Phase 4 — Lab Mode
+
+Deliverables:
+- Scenario builder.
+- Thread creation.
+- Shared variable creation.
+- Instruction editor.
+- Mutex configuration.
+- Scheduler configuration.
+- Scenario export/import.
+
+Acceptance criteria:
+- Users can construct valid scenarios without editing application source code.
+- Invalid programs display useful validation errors.
+- Imported scenarios are validated before execution.
+
+## Phase 5 — Learning centre and advanced concepts
+
+Deliverables:
+- Race conditions.
+- Mutexes.
+- Semaphores.
+- Deadlocks.
+- Starvation.
+- Scheduling algorithms.
+- Happens-before explanation.
+
+Acceptance criteria:
+- Concepts have interactive examples.
+- Users can open a concept from a related simulation event.
+- Explanations are technically consistent with the engine.
+
+## Phase 6 — Product polish and release
+
+Deliverables:
+- Premium visual system.
+- Responsive interface.
+- Onboarding.
+- Settings.
+- Accessibility improvements.
+- Empty, loading and error states.
+- Documentation.
+- GitHub README.
+- Deployment.
+- Demo recording.
+
+Acceptance criteria:
+- Critical user journeys pass.
+- Production build succeeds.
+- No known critical bugs.
+- All core features work without network access after deployment.
+
+# 14. Cursor / Codex execution protocol
+
+Do not ask the agent to implement everything in one giant prompt.
+
+Work phase by phase.
+
+Every phase must:
+1. Inspect the existing project.
+2. Understand the current architecture.
+3. Implement only the requested scope.
+4. Add or update tests.
+5. Run formatting, linting, tests and build.
+6. Fix its own failures.
+7. Update documentation.
+8. Report files changed, tests executed, results and outstanding issues.
+
+The agent must not rewrite working modules unnecessarily.
+
+Avoid fake implementations, mock success states and hardcoded dashboard values.
+
+Use realistic sample data only where appropriate.
+
+# 15. Definition of done
+
+RaceLab is ready for its first public release when a new user can:
+
+1. Open the website without registration.
+2. Start a challenge.
+3. Understand the initial thread programs.
+4. Execute threads manually.
+5. Reproduce a lost update.
+6. Inspect the memory changes.
+7. Identify the race condition.
+8. Apply a mutex-based solution.
+9. Verify the corrected result.
+10. Complete the mission and save their progress.
+
+The product should also have automated engine tests, documentation and a production deployment.
+
+**The release criterion is a working engineering experience, not simply a completed set of pages.**
+
+---
+
+# End of specification

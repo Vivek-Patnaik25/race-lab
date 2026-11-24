@@ -1,0 +1,24 @@
+:root {
+  --background: #090d14;
+  --surface: #111827;
+  --surface-raised: #172033;
+  --border: #253149;
+  --border-subtle: #1e293b;
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --accent: #8b5cf6;
+  --accent-hover: #7c3aed;
+  --accent-glow: rgba(139, 92, 246, 0.25);
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  --thread-a: #3b82f6;
+  --thread-b: #a78bfa;
+  --thread-c: #f59e0b;
+  --thread-d: #10b981;
+}
